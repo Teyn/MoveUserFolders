@@ -33,9 +33,9 @@
             this.radioButton1 = new System.Windows.Forms.RadioButton();
             this.radioButton2 = new System.Windows.Forms.RadioButton();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.Desktop = new System.Windows.Forms.CheckBox();
             this.Documents = new System.Windows.Forms.CheckBox();
             this.Downloads = new System.Windows.Forms.CheckBox();
-            this.Desktop = new System.Windows.Forms.CheckBox();
             this.label2 = new System.Windows.Forms.Label();
             this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
             this.button1 = new System.Windows.Forms.Button();
@@ -88,6 +88,22 @@
             this.groupBox1.TabIndex = 3;
             this.groupBox1.TabStop = false;
             // 
+            // Desktop
+            // 
+            this.Desktop.AutoSize = true;
+            this.Desktop.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Desktop.Image = ((System.Drawing.Image)(resources.GetObject("Desktop.Image")));
+            this.Desktop.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.Desktop.Location = new System.Drawing.Point(6, 19);
+            this.Desktop.Margin = new System.Windows.Forms.Padding(0);
+            this.Desktop.MinimumSize = new System.Drawing.Size(0, 25);
+            this.Desktop.Name = "Desktop";
+            this.Desktop.Size = new System.Drawing.Size(91, 25);
+            this.Desktop.TabIndex = 0;
+            this.Desktop.Text = "Desktop";
+            this.Desktop.TextImageRelation = System.Windows.Forms.TextImageRelation.TextBeforeImage;
+            this.Desktop.UseVisualStyleBackColor = true;
+            // 
             // Documents
             // 
             this.Documents.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
@@ -123,22 +139,6 @@
             this.Downloads.Text = "Downloads";
             this.Downloads.TextImageRelation = System.Windows.Forms.TextImageRelation.TextBeforeImage;
             this.Downloads.UseVisualStyleBackColor = true;
-            // 
-            // Desktop
-            // 
-            this.Desktop.AutoSize = true;
-            this.Desktop.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.Desktop.Image = ((System.Drawing.Image)(resources.GetObject("Desktop.Image")));
-            this.Desktop.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.Desktop.Location = new System.Drawing.Point(6, 19);
-            this.Desktop.Margin = new System.Windows.Forms.Padding(0);
-            this.Desktop.MinimumSize = new System.Drawing.Size(0, 25);
-            this.Desktop.Name = "Desktop";
-            this.Desktop.Size = new System.Drawing.Size(91, 25);
-            this.Desktop.TabIndex = 0;
-            this.Desktop.Text = "Desktop";
-            this.Desktop.TextImageRelation = System.Windows.Forms.TextImageRelation.TextBeforeImage;
-            this.Desktop.UseVisualStyleBackColor = true;
             // 
             // label2
             // 

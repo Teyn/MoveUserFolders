@@ -1,9 +1,0 @@
-F:\Asztal\MoveFolders\MoveDefaultUserFolders\MoveDefaultUserFolders\bin\Debug\MoveDefaultUserFolders.exe
-F:\Asztal\MoveFolders\MoveDefaultUserFolders\MoveDefaultUserFolders\bin\Debug\MoveDefaultUserFolders.pdb
-F:\Asztal\MoveFolders\MoveDefaultUserFolders\MoveDefaultUserFolders\obj\Debug\MoveDefaultUserFolders.csprojAssemblyReference.cache
-F:\Asztal\MoveFolders\MoveDefaultUserFolders\MoveDefaultUserFolders\obj\Debug\MoveDefaultUserFolders.Properties.Resources.resources
-F:\Asztal\MoveFolders\MoveDefaultUserFolders\MoveDefaultUserFolders\obj\Debug\MoveDefaultUserFolders.csproj.GenerateResource.cache
-F:\Asztal\MoveFolders\MoveDefaultUserFolders\MoveDefaultUserFolders\obj\Debug\MoveDefaultUserFolders.csproj.CoreCompileInputs.cache
-F:\Asztal\MoveFolders\MoveDefaultUserFolders\MoveDefaultUserFolders\obj\Debug\MoveDefaultUserFolders.exe
-F:\Asztal\MoveFolders\MoveDefaultUserFolders\MoveDefaultUserFolders\obj\Debug\MoveDefaultUserFolders.pdb
-F:\Asztal\MoveFolders\MoveDefaultUserFolders\MoveDefaultUserFolders\obj\Debug\MoveDefaultUserFolders.Form1.resources
