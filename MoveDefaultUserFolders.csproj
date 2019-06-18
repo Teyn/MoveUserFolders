@@ -75,9 +75,18 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
+    <Content Include="Icons\Contacts.ico" />
     <Content Include="Icons\Desktop.ico" />
     <Content Include="Icons\Documents.ico" />
     <Content Include="Icons\Downloads.ico" />
+    <Content Include="Icons\Favorites.ico" />
+    <Content Include="Icons\Links.ico" />
+    <Content Include="Icons\Music.ico" />
+    <Content Include="Icons\Objects.ico" />
+    <Content Include="Icons\Pictures.ico" />
+    <Content Include="Icons\SavedGames.ico" />
+    <Content Include="Icons\Searches.ico" />
+    <Content Include="Icons\Videos.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
