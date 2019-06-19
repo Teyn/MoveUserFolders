@@ -238,19 +238,6 @@
         h48JzxqTP/1iKw3ehkvBuzCSu1/odP8AOWwj6g6puEMAAAAASUVORK5CYII=
 </value>
   </data>
-  <data name="left1.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
-    <value>
-        iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAO
-        wwAADsMBx2+oZAAAAYtJREFUOE/t00tLQlEUBeBraYqV5TsVycoeCEUE0aAf0juMJv2EiqI3Tc6oScOe
-        PnpS1Lx/dldr6Q3CgQ9qVgcW4hl87L3Pvtb/+aWz+YGfxOXE0Xj4J1W2GyZWtGFdoJK2S8DNdFwB3mvA
-        s9UimCjZaCcgyOMg/hugi+m+BXzbLYJ+AgK9xAQJ6SkAQSZcJLzTAhgsVKvzEe0kJihEJFoC4kyizLvd
-        JkHNTS0KU3u9xCLE4kSSd0Ca6b9nlXtNgmpR+cKixFSRoMwDMPgIZJnYfhOgEFWnmalNVVbBWNEAseEn
-        YOwZyDGJgwZgmHPTi6pVPYBm1udUJmyEmKDxF2CSSR/WAbUilT1zqqu0yuGnnDZVmbAJQlOvwPQb74/q
-        gJqZi8urpVXbIYJ6BLU6xHmpTVUmbIbY7Dvvj2tA2ya2cY5A/gzWnIFr3sC9YOBdNPAvGQSWDYIrBpFV
-        g3jeILlmoJNZr/6OntSAtdG3qc9JX4CWVnum1dBrJvkAmpnazLIyYbnT7+AfOpb1CfjVXglqIqwbAAAA
-        AElFTkSuQmCC
-</value>
-  </data>
   <data name="left3.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAABAAAAAUCAYAAACEYr13AAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAO
@@ -283,7 +270,20 @@
         8OUAAAAASUVORK5CYII=
 </value>
   </data>
+  <data name="left1.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAO
+        wwAADsMBx2+oZAAAAYtJREFUOE/t00tLQlEUBeBraYqV5TsVycoeCEUE0aAf0juMJv2EiqI3Tc6oScOe
+        PnpS1Lx/dldr6Q3CgQ9qVgcW4hl87L3Pvtb/+aWz+YGfxOXE0Xj4J1W2GyZWtGFdoJK2S8DNdFwB3mvA
+        s9UimCjZaCcgyOMg/hugi+m+BXzbLYJ+AgK9xAQJ6SkAQSZcJLzTAhgsVKvzEe0kJihEJFoC4kyizLvd
+        JkHNTS0KU3u9xCLE4kSSd0Ca6b9nlXtNgmpR+cKixFSRoMwDMPgIZJnYfhOgEFWnmalNVVbBWNEAseEn
+        YOwZyDGJgwZgmHPTi6pVPYBm1udUJmyEmKDxF2CSSR/WAbUilT1zqqu0yuGnnDZVmbAJQlOvwPQb74/q
+        gJqZi8urpVXbIYJ6BLU6xHmpTVUmbIbY7Dvvj2tA2ya2cY5A/gzWnIFr3sC9YOBdNPAvGQSWDYIrBpFV
+        g3jeILlmoJNZr/6OntSAtdG3qc9JX4CWVnum1dBrJvkAmpnazLIyYbnT7+AfOpb1CfjVXglqIqwbAAAA
+        AElFTkSuQmCC
+</value>
+  </data>
   <metadata name="LocationBrowserDialog.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>46, -4</value>
+    <value>38, 7</value>
   </metadata>
 </root>
