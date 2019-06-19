@@ -7,7 +7,9 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using System.Security.Principal;
-
+//TODO: top location changes it for all
+//TODO: button (maybe progression bar)
+//TODO: Icon
 namespace MoveDefaultUserFolders
 {
     public partial class Form1 : Form
@@ -16,7 +18,7 @@ namespace MoveDefaultUserFolders
         {
             InitializeComponent();
 
-            if (!IsAdministrator()) System.Windows.Forms.MessageBox.Show("Please make sure you run as administrator!\n It is required because this program edits registry.");
+            if (!IsAdministrator()) System.Windows.Forms.MessageBox.Show("Please make sure you run as administrator!\n\nIt is required because this program edits registry.");
         }
 
         private static bool IsAdministrator()
@@ -30,30 +32,8 @@ namespace MoveDefaultUserFolders
         {
             LocationBrowserDialog.ShowDialog();
             LocationTextBox.Text = LocationBrowserDialog.SelectedPath;
-            ChangeTextboxes(GroupBox);
-
         }
-        int teszt = 13;
-        private void ChangeTextboxes(Control ctrl)
-        {
-            
-            TextBox textBox = ctrl as TextBox;
-            if (textBox == null)
-            {
-                foreach (Control child in ctrl.Controls)
-                {
-                    ChangeTextboxes(child);
-                }
-            }
-            else
-            {
-                // textBox.Text = LocationTextBox.Text = LocationBrowserDialog.SelectedPath + "\\" + getName("");
-                teszt--;
-                textBox.Text = teszt.ToString();
-                
-            }
-        }
-
+        
         private bool selected = true;
         private void RadioButton1_Click(object sender, EventArgs e)
         {
@@ -63,6 +43,7 @@ namespace MoveDefaultUserFolders
                 HeightChange();
                 CheckBoxPadding(GroupBox);
                 ToggleVisibility(GroupBox);
+                
                 selected = !selected;
             }
         }
@@ -72,9 +53,9 @@ namespace MoveDefaultUserFolders
             if (selected)
             {
                 UncheckAll(GroupBox);
-                HeightChange();
+                HeightChange();      
                 CheckBoxPadding(GroupBox);
-                ToggleVisibility(GroupBox);
+                ToggleVisibility(GroupBox);       
                 selected = !selected;
             }
         }
@@ -83,6 +64,26 @@ namespace MoveDefaultUserFolders
         {
             if (YesRadioButton.Checked) { this.Height -= 120; GroupBox.Height -= 120; }
             if (NoRadioButton.Checked) { this.Height += 120; GroupBox.Height += 120; }
+        }
+
+
+        private void CheckAll(Control ctrl)
+        {
+            CheckBox checkBox = ctrl as CheckBox;
+            if (checkBox == null)
+            {
+                foreach (Control child in ctrl.Controls)
+                {
+                    CheckAll(child);
+                }
+            }
+            else
+            {
+                if (checkBox.Name != "selectAllCheckBox")
+                {
+                    checkBox.Checked = true;
+                }
+            }
         }
 
         private void UncheckAll(Control ctrl)
@@ -97,7 +98,7 @@ namespace MoveDefaultUserFolders
             }
             else
             {
-                checkBox.Checked = false;
+                    checkBox.Checked = false;
             }
         }
 
@@ -178,36 +179,26 @@ namespace MoveDefaultUserFolders
             }
             else
             {
-                if (checkBox.Name.ToString() != "left1" && checkBox.Name.ToString() != "right1")
-                {
-                    if (selected)
+                if (checkBox.Name != "selectAllCheckBox") { 
+                    if (checkBox.Name.ToString() != "Desktop" && checkBox.Name.ToString() != "Links")
                     {
-                        x = Convert.ToInt32(checkBox.Location.X.ToString());
-                        y = Convert.ToInt32(checkBox.Location.Y.ToString()) * 2 - 19;
-                        checkBox.Location = new Point(x, y);
-                    }
-                    else
-                    {
-                        x = Convert.ToInt32(checkBox.Location.X.ToString());
-                        y = Convert.ToInt32(checkBox.Location.Y.ToString()) / 2 + 10;
-                        checkBox.Location = new Point(x, y);
+                        if (selected)
+                        {
+                            x = Convert.ToInt32(checkBox.Location.X.ToString());
+                            y = Convert.ToInt32(checkBox.Location.Y.ToString()) * 2 - 19;
+                            checkBox.Location = new Point(x, y);
+                        }
+                        else
+                        {
+                            x = Convert.ToInt32(checkBox.Location.X.ToString());
+                            y = Convert.ToInt32(checkBox.Location.Y.ToString()) / 2 + 10;
+                            checkBox.Location = new Point(x, y);
+                        }
                     }
                 }
             }
         }
-
-        string[,] names = new string[2, 6] { { "Desktop", "Downloads", "Documents", "Pictures", "Videos", "Music" }, { "Links", "Favorites", "Searches", "Saved Games", "Contacts", "3D Objects" } };
-        
-        private string getName(string name)
-        {
-            int helper1 = 0;
-            string helper2 = name.Substring(name.Length - 1, 1);
-            if (name.StartsWith("left")) { helper1 = 0; } else { helper1 = 1; }
-
-
-            return names[helper1,int.Parse(helper2) - 1];
-        }
-
+ 
         private void TextBox_TextChanged(object sender, EventArgs e)
         {
             TextBox textbox = (TextBox)sender;
@@ -215,199 +206,230 @@ namespace MoveDefaultUserFolders
             textbox.SelectionLength = 0;
         }
         //Button Clicks
-        private void Left1Button_Click(object sender, EventArgs e)
+        private void DesktopButton_Click(object sender, EventArgs e)
         {
             LocationBrowserDialog.ShowDialog();
-            left1_TextBox.Text = LocationBrowserDialog.SelectedPath + "\\" + getName("left1");
+            Desktop_TextBox.Text = LocationBrowserDialog.SelectedPath + "\\Desktop";
         }
 
-        private void Left2Button_Click(object sender, EventArgs e)
+        private void DownloadsButton_Click(object sender, EventArgs e)
         {
             LocationBrowserDialog.ShowDialog();
-            left2_TextBox.Text = LocationBrowserDialog.SelectedPath;
+            Downloads_TextBox.Text = LocationBrowserDialog.SelectedPath + "\\Downloads";
         }
 
-        private void Left3Button_Click(object sender, EventArgs e)
+        private void DocumentsButton_Click(object sender, EventArgs e)
         {
             LocationBrowserDialog.ShowDialog();
-            left3_TextBox.Text = LocationBrowserDialog.SelectedPath;
+            Documents_TextBox.Text = LocationBrowserDialog.SelectedPath + "\\Documents";
         }
 
-        private void Left4Button_Click(object sender, EventArgs e)
+        private void PicturesButton_Click(object sender, EventArgs e)
         {
             LocationBrowserDialog.ShowDialog();
-            left4_TextBox.Text = LocationBrowserDialog.SelectedPath;
+            Pictures_TextBox.Text = LocationBrowserDialog.SelectedPath + "\\Pictures";
         }
 
-        private void Left5Button_Click(object sender, EventArgs e)
+        private void VideosButton_Click(object sender, EventArgs e)
         {
             LocationBrowserDialog.ShowDialog();
-            left5_TextBox.Text = LocationBrowserDialog.SelectedPath;
+            Videos_TextBox.Text = LocationBrowserDialog.SelectedPath + "\\Videos";
         }
 
-        private void Left6Button_Click(object sender, EventArgs e)
+        private void MusicButton_Click(object sender, EventArgs e)
         {
             LocationBrowserDialog.ShowDialog();
-            left6_TextBox.Text = LocationBrowserDialog.SelectedPath;
+            Music_TextBox.Text = LocationBrowserDialog.SelectedPath + "\\Music";
         }
 
-        private void Right1_Button_Click(object sender, EventArgs e)
+        private void Links_Button_Click(object sender, EventArgs e)
         {
             LocationBrowserDialog.ShowDialog();
-            right1_TextBox.Text = LocationBrowserDialog.SelectedPath;
+            Links_TextBox.Text = LocationBrowserDialog.SelectedPath + "\\Links";
         }
 
-        private void Right2_Button_Click(object sender, EventArgs e)
+        private void Favorites_Button_Click(object sender, EventArgs e)
         {
             LocationBrowserDialog.ShowDialog();
-            right2_TextBox.Text = LocationBrowserDialog.SelectedPath;
+            Favorites_TextBox.Text = LocationBrowserDialog.SelectedPath + "\\Favorites";
         }
 
-        private void Right3_Button_Click(object sender, EventArgs e)
+        private void Searches_Button_Click(object sender, EventArgs e)
         {
             LocationBrowserDialog.ShowDialog();
-            right3_TextBox.Text = LocationBrowserDialog.SelectedPath;
+            Searches_TextBox.Text = LocationBrowserDialog.SelectedPath + "\\Searches";
         }
 
-        private void Right4_Button_Click(object sender, EventArgs e)
+        private void SavedGames_Button_Click(object sender, EventArgs e)
         {
             LocationBrowserDialog.ShowDialog();
-            right4_TextBox.Text = LocationBrowserDialog.SelectedPath;
+            SavedGames_TextBox.Text = LocationBrowserDialog.SelectedPath + "\\Saved Games";
         }
 
-        private void Right5_Button_Click(object sender, EventArgs e)
+        private void Contacts_Button_Click(object sender, EventArgs e)
         {
             LocationBrowserDialog.ShowDialog();
-            right5_TextBox.Text = LocationBrowserDialog.SelectedPath;
+            Contacts_TextBox.Text = LocationBrowserDialog.SelectedPath + "\\Contacts";
         }
 
-        private void Right6_Button_Click(object sender, EventArgs e)
+        private void Objects_Button_Click(object sender, EventArgs e)
         {
             LocationBrowserDialog.ShowDialog();
-            right6_TextBox.Text = LocationBrowserDialog.SelectedPath;
+            Objects_TextBox.Text = LocationBrowserDialog.SelectedPath + "\\3D Objects";
         }
-      
+
         //Checkbox changes
-
-        private void Left1_CheckedChanged(object sender, EventArgs e)
+        private int selectionCounter = 0;
+        private void Desktop_CheckedChanged(object sender, EventArgs e)
         {
+            CheckBox checkbox = (CheckBox)sender;
             if (!selected)
-            {
-                CheckBox checkbox = (CheckBox)sender;
-                left1_TextBox.Enabled = checkbox.Checked;
-                left1_Button.Enabled = checkbox.Checked;
+            { 
+                Desktop_TextBox.Enabled = checkbox.Checked;
+                Desktop_Button.Enabled = checkbox.Checked;
             }
+            if (checkbox.Checked == false) { selectAllCheckBox.Checked = false; selectionCounter--; } else selectionCounter++;
+            if (selectionCounter == 12) selectAllCheckBox.Checked = true;
         }
 
-        private void Left2_CheckedChanged(object sender, EventArgs e)
+        private void Downloads_CheckedChanged(object sender, EventArgs e)
         {
+            CheckBox checkbox = (CheckBox)sender;
             if (!selected)
             {
-                CheckBox checkbox = (CheckBox)sender;
-                left2_TextBox.Enabled = checkbox.Checked;
-                left2_Button.Enabled = checkbox.Checked;
+                Downloads_TextBox.Enabled = checkbox.Checked;
+                Downloads_Button.Enabled = checkbox.Checked;
             }
+            if (checkbox.Checked == false) { selectAllCheckBox.Checked = false; selectionCounter--; } else selectionCounter++;
+            if (selectionCounter == 12) selectAllCheckBox.Checked = true;
         }
 
-        private void Left3_CheckedChanged(object sender, EventArgs e)
+        private void Documents_CheckedChanged(object sender, EventArgs e)
         {
+            CheckBox checkbox = (CheckBox)sender;
             if (!selected)
             {
-                CheckBox checkbox = (CheckBox)sender;
-                left3_TextBox.Enabled = checkbox.Checked;
-                left3_Button.Enabled = checkbox.Checked;
+                Documents_TextBox.Enabled = checkbox.Checked;
+                Documents_Button.Enabled = checkbox.Checked;
             }
+            if (checkbox.Checked == false) { selectAllCheckBox.Checked = false; selectionCounter--; } else selectionCounter++;
+            if (selectionCounter == 12) selectAllCheckBox.Checked = true;
         }
 
-        private void Left4_CheckedChanged(object sender, EventArgs e)
+        private void Pictures_CheckedChanged(object sender, EventArgs e)
         {
+            CheckBox checkbox = (CheckBox)sender;
             if (!selected)
             {
-                CheckBox checkbox = (CheckBox)sender;
-                left4_TextBox.Enabled = checkbox.Checked;
-                left4_Button.Enabled = checkbox.Checked;
+                Pictures_TextBox.Enabled = checkbox.Checked;
+                Pictures_Button.Enabled = checkbox.Checked;
             }
+            if (checkbox.Checked == false) { selectAllCheckBox.Checked = false; selectionCounter--; } else selectionCounter++;
+            if (selectionCounter == 12) selectAllCheckBox.Checked = true;
         }
 
-        private void Left5_CheckedChanged(object sender, EventArgs e)
+        private void Videos_CheckedChanged(object sender, EventArgs e)
         {
+            CheckBox checkbox = (CheckBox)sender;
             if (!selected)
             {
-                CheckBox checkbox = (CheckBox)sender;
-                left5_TextBox.Enabled = checkbox.Checked;
-                left5_Button.Enabled = checkbox.Checked;
+                Videos_TextBox.Enabled = checkbox.Checked;
+                Videos_Button.Enabled = checkbox.Checked;
             }
+            if (checkbox.Checked == false) { selectAllCheckBox.Checked = false; selectionCounter--; } else selectionCounter++;
+            if (selectionCounter == 12) selectAllCheckBox.Checked = true;
         }
 
-        private void Left6_CheckedChanged(object sender, EventArgs e)
+        private void Music_CheckedChanged(object sender, EventArgs e)
         {
+            CheckBox checkbox = (CheckBox)sender;
             if (!selected)
             {
-                CheckBox checkbox = (CheckBox)sender;
-                left6_TextBox.Enabled = checkbox.Checked;
-                left6_Button.Enabled = checkbox.Checked;
+                Music_TextBox.Enabled = checkbox.Checked;
+                Music_Button.Enabled = checkbox.Checked;
             }
+            if (checkbox.Checked == false) { selectAllCheckBox.Checked = false; selectionCounter--; } else selectionCounter++;
+            if (selectionCounter == 12) selectAllCheckBox.Checked = true;
         }
 
 
-        private void Right1_CheckedChanged(object sender, EventArgs e)
+        private void Links_CheckedChanged(object sender, EventArgs e)
         {
+            CheckBox checkbox = (CheckBox)sender;
             if (!selected)
             {
-                CheckBox checkbox = (CheckBox)sender;
-                right1_TextBox.Enabled = checkbox.Checked;
-                right1_Button.Enabled = checkbox.Checked;
+                Links_TextBox.Enabled = checkbox.Checked;
+                Links_Button.Enabled = checkbox.Checked;
             }
+            if (checkbox.Checked == false) { selectAllCheckBox.Checked = false; selectionCounter--; } else selectionCounter++;
+            if (selectionCounter == 12) selectAllCheckBox.Checked = true;
         }
 
-        private void Right2_CheckedChanged(object sender, EventArgs e)
+        private void Favorites_CheckedChanged(object sender, EventArgs e)
         {
+            CheckBox checkbox = (CheckBox)sender;
             if (!selected)
             {
-                CheckBox checkbox = (CheckBox)sender;
-                right2_TextBox.Enabled = checkbox.Checked;
-                right2_Button.Enabled = checkbox.Checked;
+                Favorites_TextBox.Enabled = checkbox.Checked;
+                Favorites_Button.Enabled = checkbox.Checked;
             }
+            if (checkbox.Checked == false) { selectAllCheckBox.Checked = false; selectionCounter--; } else selectionCounter++;
+            if (selectionCounter == 12) selectAllCheckBox.Checked = true;
         }
 
-        private void Right3_CheckedChanged(object sender, EventArgs e)
+        private void Searches_CheckedChanged(object sender, EventArgs e)
         {
+            CheckBox checkbox = (CheckBox)sender;
             if (!selected)
             {
-                CheckBox checkbox = (CheckBox)sender;
-                right3_TextBox.Enabled = checkbox.Checked;
-                right3_Button.Enabled = checkbox.Checked;
+                Searches_TextBox.Enabled = checkbox.Checked;
+                Searches_Button.Enabled = checkbox.Checked;
             }
+            if (checkbox.Checked == false) { selectAllCheckBox.Checked = false; selectionCounter--; } else selectionCounter++;
+            if (selectionCounter == 12) selectAllCheckBox.Checked = true;
         }
 
-        private void Right4_CheckedChanged(object sender, EventArgs e)
+        private void SavedGames_CheckedChanged(object sender, EventArgs e)
         {
+            CheckBox checkbox = (CheckBox)sender;
             if (!selected)
             {
-                CheckBox checkbox = (CheckBox)sender;
-                right4_TextBox.Enabled = checkbox.Checked;
-                right4_Button.Enabled = checkbox.Checked;
+                SavedGames_TextBox.Enabled = checkbox.Checked;
+                SavedGames_Button.Enabled = checkbox.Checked;
             }
+            if (checkbox.Checked == false) { selectAllCheckBox.Checked = false; selectionCounter--; } else selectionCounter++;
+            if (selectionCounter == 12) selectAllCheckBox.Checked = true;
         }
 
-        private void Right5_CheckedChanged(object sender, EventArgs e)
+        private void Contacts_CheckedChanged(object sender, EventArgs e)
         {
+            CheckBox checkbox = (CheckBox)sender;
             if (!selected)
             {
-                CheckBox checkbox = (CheckBox)sender;
-                right5_TextBox.Enabled = checkbox.Checked;
-                right5_Button.Enabled = checkbox.Checked;
+                Contacts_TextBox.Enabled = checkbox.Checked;
+                Contacts_Button.Enabled = checkbox.Checked;
             }
+            if (checkbox.Checked == false) { selectAllCheckBox.Checked = false; selectionCounter--; } else selectionCounter++;
+            if (selectionCounter == 12) selectAllCheckBox.Checked = true;
         }
 
-        private void Right6_CheckedChanged(object sender, EventArgs e)
+        private void Objects_CheckedChanged(object sender, EventArgs e)
         {
+            CheckBox checkbox = (CheckBox)sender;
             if (!selected)
             {
-                CheckBox checkbox = (CheckBox)sender;
-                right6_TextBox.Enabled = checkbox.Checked;
-                right6_Button.Enabled = checkbox.Checked;
+                Objects_TextBox.Enabled = checkbox.Checked;
+                Objects_Button.Enabled = checkbox.Checked;
             }
+            if (checkbox.Checked == false) { selectAllCheckBox.Checked = false; selectionCounter--; } else selectionCounter++;
+            if (selectionCounter == 12) selectAllCheckBox.Checked = true;
+        }
+
+        private void SelectAllCheckBox_Click(object sender, EventArgs e)
+        {
+            CheckBox checkBox = (CheckBox)sender;
+            if (checkBox.Checked) CheckAll(GroupBox);
+            if (!checkBox.Checked) UncheckAll(GroupBox);
         }
 
     }
