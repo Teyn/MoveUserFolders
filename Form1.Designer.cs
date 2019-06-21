@@ -77,6 +77,9 @@ namespace MoveDefaultUserFolders
             this.LocationBrowserDialog = new System.Windows.Forms.FolderBrowserDialog();
             this.LocationBrowseButton = new System.Windows.Forms.Button();
             this.LocationTextBox = new System.Windows.Forms.TextBox();
+            this.moveButton = new System.Windows.Forms.Button();
+            this.infoButton = new System.Windows.Forms.Button();
+            this.progressBar = new System.Windows.Forms.ProgressBar();
             this.GroupBox.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -158,7 +161,7 @@ namespace MoveDefaultUserFolders
             this.GroupBox.Location = new System.Drawing.Point(15, 79);
             this.GroupBox.Margin = new System.Windows.Forms.Padding(0);
             this.GroupBox.Name = "GroupBox";
-            this.GroupBox.Size = new System.Drawing.Size(331, 235);
+            this.GroupBox.Size = new System.Drawing.Size(331, 183);
             this.GroupBox.TabIndex = 6;
             this.GroupBox.TabStop = false;
             // 
@@ -353,6 +356,8 @@ namespace MoveDefaultUserFolders
             // 
             // SavedGames_TextBox
             // 
+            //System.Environment.GetEnvironmentVariable("USERPROFILE");
+
             this.SavedGames_TextBox.Enabled = false;
             this.SavedGames_TextBox.Location = new System.Drawing.Point(211, 194);
             this.SavedGames_TextBox.Name = "SavedGames_TextBox";
@@ -717,7 +722,7 @@ namespace MoveDefaultUserFolders
             this.LocationBrowseButton.TabIndex = 4;
             this.LocationBrowseButton.Text = "Browse...";
             this.LocationBrowseButton.UseVisualStyleBackColor = true;
-            this.LocationBrowseButton.Click += new System.EventHandler(this.Button1_Click);
+            this.LocationBrowseButton.Click += new System.EventHandler(this.LocationBrowseButton_Click);
             // 
             // LocationTextBox
             // 
@@ -725,14 +730,43 @@ namespace MoveDefaultUserFolders
             this.LocationTextBox.Name = "LocationTextBox";
             this.LocationTextBox.Size = new System.Drawing.Size(250, 20);
             this.LocationTextBox.TabIndex = 5;
-            //TODO: System.Environment.GetEnvironmentVariable("USERPROFILE") + "\\";
             this.LocationTextBox.Text = "C:\\Users\\teyn";
+            // 
+            // moveButton
+            // 
+            this.moveButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.moveButton.Location = new System.Drawing.Point(16, 269);
+            this.moveButton.Name = "moveButton";
+            this.moveButton.Size = new System.Drawing.Size(83, 25);
+            this.moveButton.TabIndex = 7;
+            this.moveButton.Text = "Move folders";
+            this.moveButton.UseVisualStyleBackColor = true;
+            this.moveButton.Click += new System.EventHandler(this.MoveButton_Click);
+            // 
+            // infoButton
+            // 
+            this.infoButton.Image = ((System.Drawing.Image)(resources.GetObject("infoButton.Image")));
+            this.infoButton.Location = new System.Drawing.Point(320, 269);
+            this.infoButton.Name = "infoButton";
+            this.infoButton.Size = new System.Drawing.Size(26, 25);
+            this.infoButton.TabIndex = 9;
+            this.infoButton.UseVisualStyleBackColor = true;
+            // 
+            // progressBar
+            // 
+            this.progressBar.Location = new System.Drawing.Point(105, 270);
+            this.progressBar.Name = "progressBar";
+            this.progressBar.Size = new System.Drawing.Size(212, 23);
+            this.progressBar.TabIndex = 10;
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(365, 333);
+            this.ClientSize = new System.Drawing.Size(365, 309);
+            this.Controls.Add(this.progressBar);
+            this.Controls.Add(this.infoButton);
+            this.Controls.Add(this.moveButton);
             this.Controls.Add(this.LocationTextBox);
             this.Controls.Add(this.LocationBrowseButton);
             this.Controls.Add(this.LocationLabel);
@@ -798,6 +832,9 @@ namespace MoveDefaultUserFolders
         private System.Windows.Forms.TextBox Music_TextBox;
         private System.Windows.Forms.TextBox Videos_TextBox;
         private System.Windows.Forms.CheckBox selectAllCheckBox;
+        private System.Windows.Forms.Button moveButton;
+        private System.Windows.Forms.Button infoButton;
+        private System.Windows.Forms.ProgressBar progressBar;
     }
 }
 

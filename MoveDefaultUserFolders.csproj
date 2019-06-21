@@ -80,6 +80,7 @@
     <Content Include="Icons\Documents.ico" />
     <Content Include="Icons\Downloads.ico" />
     <Content Include="Icons\Favorites.ico" />
+    <Content Include="Icons\infoicon2.ico" />
     <Content Include="Icons\Links.ico" />
     <Content Include="Icons\Music.ico" />
     <Content Include="Icons\Objects.ico" />

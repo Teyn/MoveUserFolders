@@ -286,4 +286,13 @@
   <metadata name="LocationBrowserDialog.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>38, 7</value>
   </metadata>
+  <data name="infoButton.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8
+        YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAACwSURBVDhPrVLBDYMwDPSESLz7ZIF+KjFEP52BDdiCL5+O
+        43KpziSOQ6XCSYeC7TtsE6nQPfWQTbCgf6kMs8p9URnfX+KMGHKhEYO3SeWx7kJP5FBTmVDsBISPm4mJ
+        0VrwZcLHUy3HSQ/M54t+ERozyBeWkYhySWMGUcFGIsolXmdweoTGEokoVy7x1G/kXfj7IgF4oUnQiRE5
+        igsDgEG0hvnyxeKMGNuuxDlY0GIBkQ/p6AInOuDjjwAAAABJRU5ErkJggg==
+</value>
+  </data>
 </root>
