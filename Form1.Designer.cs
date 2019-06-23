@@ -350,13 +350,12 @@ namespace MoveDefaultUserFolders
             this.Contacts_TextBox.Name = "Contacts_TextBox";
             this.Contacts_TextBox.Size = new System.Drawing.Size(103, 20);
             this.Contacts_TextBox.TabIndex = 32;
-            this.Objects_TextBox.Text = System.Environment.GetEnvironmentVariable("USERPROFILE") + '\\' + getFolderName("{56784854-C6CB-462B-8169-88E350ACB882}");
+            this.Contacts_TextBox.Text = System.Environment.GetEnvironmentVariable("USERPROFILE") + '\\' + getFolderName("{56784854-C6CB-462B-8169-88E350ACB882}");
             this.Contacts_TextBox.Visible = false;
             this.Contacts_TextBox.TextChanged += new System.EventHandler(this.TextBox_TextChanged);
             // 
             // SavedGames_TextBox
             // 
-            //System.Environment.GetEnvironmentVariable("USERPROFILE");
 
             this.SavedGames_TextBox.Enabled = false;
             this.SavedGames_TextBox.Location = new System.Drawing.Point(211, 194);
@@ -730,7 +729,7 @@ namespace MoveDefaultUserFolders
             this.LocationTextBox.Name = "LocationTextBox";
             this.LocationTextBox.Size = new System.Drawing.Size(250, 20);
             this.LocationTextBox.TabIndex = 5;
-            this.LocationTextBox.Text = "C:\\Users\\teyn";
+            this.LocationTextBox.Text = System.Environment.GetEnvironmentVariable("USERPROFILE") + '\\';
             // 
             // moveButton
             // 
