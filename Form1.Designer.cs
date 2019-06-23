@@ -339,7 +339,7 @@ namespace MoveDefaultUserFolders
             this.Objects_TextBox.Name = "Objects_TextBox";
             this.Objects_TextBox.Size = new System.Drawing.Size(103, 20);
             this.Objects_TextBox.TabIndex = 35;
-            this.Objects_TextBox.Text = "C:\\Users\\teyn\\";
+            this.Objects_TextBox.Text = System.Environment.GetEnvironmentVariable("USERPROFILE") + '\\' + getFolderName("{31C0DD25-9439-4F12-BF41-7FF4EDA38722}");
             this.Objects_TextBox.Visible = false;
             this.Objects_TextBox.TextChanged += new System.EventHandler(this.TextBox_TextChanged);
             // 
@@ -350,7 +350,7 @@ namespace MoveDefaultUserFolders
             this.Contacts_TextBox.Name = "Contacts_TextBox";
             this.Contacts_TextBox.Size = new System.Drawing.Size(103, 20);
             this.Contacts_TextBox.TabIndex = 32;
-            this.Contacts_TextBox.Text = "C:\\Users\\teyn\\";
+            this.Objects_TextBox.Text = System.Environment.GetEnvironmentVariable("USERPROFILE") + '\\' + getFolderName("{56784854-C6CB-462B-8169-88E350ACB882}");
             this.Contacts_TextBox.Visible = false;
             this.Contacts_TextBox.TextChanged += new System.EventHandler(this.TextBox_TextChanged);
             // 
@@ -363,7 +363,7 @@ namespace MoveDefaultUserFolders
             this.SavedGames_TextBox.Name = "SavedGames_TextBox";
             this.SavedGames_TextBox.Size = new System.Drawing.Size(103, 20);
             this.SavedGames_TextBox.TabIndex = 29;
-            this.SavedGames_TextBox.Text = "C:\\Users\\teyn\\";
+            this.SavedGames_TextBox.Text = System.Environment.GetEnvironmentVariable("USERPROFILE") + '\\' + getFolderName("{4C5C32FF-BB9D-43B0-B5B4-2D72E54EAAA4}");
             this.SavedGames_TextBox.Visible = false;
             this.SavedGames_TextBox.TextChanged += new System.EventHandler(this.TextBox_TextChanged);
             // 
@@ -374,7 +374,7 @@ namespace MoveDefaultUserFolders
             this.Searches_TextBox.Name = "Searches_TextBox";
             this.Searches_TextBox.Size = new System.Drawing.Size(103, 20);
             this.Searches_TextBox.TabIndex = 26;
-            this.Searches_TextBox.Text = "C:\\Users\\teyn\\";
+            this.Searches_TextBox.Text = System.Environment.GetEnvironmentVariable("USERPROFILE") + '\\' + getFolderName("{7D1D3A04-DEBB-4115-95CF-2F29DA2920DA}");
             this.Searches_TextBox.Visible = false;
             this.Searches_TextBox.TextChanged += new System.EventHandler(this.TextBox_TextChanged);
             // 
@@ -385,7 +385,7 @@ namespace MoveDefaultUserFolders
             this.Favorites_TextBox.Name = "Favorites_TextBox";
             this.Favorites_TextBox.Size = new System.Drawing.Size(103, 20);
             this.Favorites_TextBox.TabIndex = 23;
-            this.Favorites_TextBox.Text = "C:\\Users\\teyn\\";
+            this.Favorites_TextBox.Text = System.Environment.GetEnvironmentVariable("USERPROFILE") + '\\' + getFolderName("Favorites");
             this.Favorites_TextBox.Visible = false;
             this.Favorites_TextBox.TextChanged += new System.EventHandler(this.TextBox_TextChanged);
             // 
@@ -396,7 +396,7 @@ namespace MoveDefaultUserFolders
             this.Links_TextBox.Name = "Links_TextBox";
             this.Links_TextBox.Size = new System.Drawing.Size(103, 20);
             this.Links_TextBox.TabIndex = 20;
-            this.Links_TextBox.Text = "C:\\Users\\teyn\\";
+            this.Links_TextBox.Text = System.Environment.GetEnvironmentVariable("USERPROFILE") + '\\' + getFolderName("{BFB9D5E0-C6A9-404C-B2B2-AE6DB6AF4968}");
             this.Links_TextBox.Visible = false;
             this.Links_TextBox.TextChanged += new System.EventHandler(this.TextBox_TextChanged);
             // 
@@ -407,7 +407,7 @@ namespace MoveDefaultUserFolders
             this.Music_TextBox.Name = "Music_TextBox";
             this.Music_TextBox.Size = new System.Drawing.Size(103, 20);
             this.Music_TextBox.TabIndex = 17;
-            this.Music_TextBox.Text = "C:\\Users\\teyn\\";
+            this.Music_TextBox.Text = System.Environment.GetEnvironmentVariable("USERPROFILE") + '\\' + getFolderName("My Music");
             this.Music_TextBox.Visible = false;
             this.Music_TextBox.TextChanged += new System.EventHandler(this.TextBox_TextChanged);
             // 
@@ -418,7 +418,7 @@ namespace MoveDefaultUserFolders
             this.Videos_TextBox.Name = "Videos_TextBox";
             this.Videos_TextBox.Size = new System.Drawing.Size(103, 20);
             this.Videos_TextBox.TabIndex = 14;
-            this.Videos_TextBox.Text = "C:\\Users\\teyn\\";
+            this.Videos_TextBox.Text = System.Environment.GetEnvironmentVariable("USERPROFILE") + '\\' + getFolderName("My Video");
             this.Videos_TextBox.Visible = false;
             this.Videos_TextBox.TextChanged += new System.EventHandler(this.TextBox_TextChanged);
             // 
@@ -429,7 +429,7 @@ namespace MoveDefaultUserFolders
             this.Pictures_TextBox.Name = "Pictures_TextBox";
             this.Pictures_TextBox.Size = new System.Drawing.Size(103, 20);
             this.Pictures_TextBox.TabIndex = 11;
-            this.Pictures_TextBox.Text = "C:\\Users\\teyn\\";
+            this.Pictures_TextBox.Text = System.Environment.GetEnvironmentVariable("USERPROFILE") + '\\' + getFolderName("My Pictures");
             this.Pictures_TextBox.Visible = false;
             this.Pictures_TextBox.TextChanged += new System.EventHandler(this.TextBox_TextChanged);
             // 
@@ -440,7 +440,7 @@ namespace MoveDefaultUserFolders
             this.Documents_TextBox.Name = "Documents_TextBox";
             this.Documents_TextBox.Size = new System.Drawing.Size(103, 20);
             this.Documents_TextBox.TabIndex = 8;
-            this.Documents_TextBox.Text = "C:\\Users\\teyn\\";
+            this.Documents_TextBox.Text = System.Environment.GetEnvironmentVariable("USERPROFILE") + '\\' + getFolderName("Personal");
             this.Documents_TextBox.Visible = false;
             this.Documents_TextBox.TextChanged += new System.EventHandler(this.TextBox_TextChanged);
             // 
@@ -451,7 +451,7 @@ namespace MoveDefaultUserFolders
             this.Downloads_TextBox.Name = "Downloads_TextBox";
             this.Downloads_TextBox.Size = new System.Drawing.Size(103, 20);
             this.Downloads_TextBox.TabIndex = 5;
-            this.Downloads_TextBox.Text = "C:\\Users\\teyn\\";
+            this.Downloads_TextBox.Text = System.Environment.GetEnvironmentVariable("USERPROFILE") + '\\' + getFolderName("{374DE290-123F-4565-9164-39C4925E467B}");
             this.Downloads_TextBox.Visible = false;
             this.Downloads_TextBox.TextChanged += new System.EventHandler(this.TextBox_TextChanged);
             // 
@@ -462,7 +462,7 @@ namespace MoveDefaultUserFolders
             this.Desktop_TextBox.Name = "Desktop_TextBox";
             this.Desktop_TextBox.Size = new System.Drawing.Size(103, 20);
             this.Desktop_TextBox.TabIndex = 2;
-            this.Desktop_TextBox.Text = "C:\\Users\\teyn\\";
+            this.Desktop_TextBox.Text = System.Environment.GetEnvironmentVariable("USERPROFILE") + '\\' + getFolderName("Desktop");
             this.Desktop_TextBox.Visible = false;
             this.Desktop_TextBox.TextChanged += new System.EventHandler(this.TextBox_TextChanged);
             // 

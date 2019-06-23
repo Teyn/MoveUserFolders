@@ -38,6 +38,8 @@ namespace MoveDefaultUserFolders
         {
             LocationBrowserDialog.ShowDialog();
             LocationTextBox.Text = LocationBrowserDialog.SelectedPath;
+            string[] lengthHelper = (LocationTextBox.Text + '\\').Split('\\');
+            if (!(lengthHelper[1].Length == 0)) { LocationTextBox.Text = LocationTextBox.Text + '\\'; }
             ChangeLocation(GroupBox, LocationBrowserDialog.SelectedPath);
         }
 
@@ -109,11 +111,9 @@ namespace MoveDefaultUserFolders
             else
             {
                 string[] directory = textBox.Text.Split('\\');
-                textBox.Text = location + "\\" + directory[directory.Length-2];
+                textBox.Text = location + directory[directory.Length-2];
             }
-
         }
-
 
         private void CheckAll(Control ctrl)
         {
@@ -248,77 +248,283 @@ namespace MoveDefaultUserFolders
             textbox.SelectionStart = textbox.Text.Length;
             textbox.SelectionLength = 0;
         }
+
+        //Move methods
+        //TODO: fix documents
+        private void MoveFolders()
+        {
+            if (YesRadioButton.Checked)
+            {
+                if (Desktop.Checked) MoveDirectory("Desktop",-183, "imageres.dll","");
+                if (Downloads.Checked) MoveDirectory("{374DE290-123F-4565-9164-39C4925E467B}",-184, "imageres.dll","");
+                if (Documents.Checked) MoveDirectory("Personal", -112, "imageres.dll", "");
+                if (Pictures.Checked) MoveDirectory("My Pictures", -113, "imageres.dll", "");
+                if (Videos.Checked) MoveDirectory("My Video", -189, "imageres.dll", "");
+                if (Music.Checked) MoveDirectory("My Music", -108, "imageres.dll", "");
+                if (Links.Checked) MoveDirectory("{BFB9D5E0-C6A9-404C-B2B2-AE6DB6AF4968}", -185, "imageres.dll", "");
+                if (Favorites.Checked) MoveDirectory("Favorites", -173, "shell32.dll", "");
+                if (Searches.Checked) MoveDirectory("{7D1D3A04-DEBB-4115-95CF-2F29DA2920DA}", -18, "imageres.dll", "");
+                if (SavedGames.Checked) MoveDirectory("{4C5C32FF-BB9D-43B0-B5B4-2D72E54EAAA4}", -186, "imageres.dll", "");
+                if (Contacts.Checked) MoveDirectory("{56784854-C6CB-462B-8169-88E350ACB882}", -181, "imageres.dll", "");
+                if (Objects.Checked) MoveDirectory("{31C0DD25-9439-4F12-BF41-7FF4EDA38722}", -108, "imageres.dll", "");
+            }
+            else
+            {
+                if (Desktop.Checked) MoveDirectory("Desktop", -183, "imageres.dll", Desktop_TextBox.Text);
+                if (Downloads.Checked) MoveDirectory("{374DE290-123F-4565-9164-39C4925E467B}", -184, "imageres.dll", Downloads_TextBox.Text);
+                if (Documents.Checked) MoveDirectory("Personal", -112, "imageres.dll", Documents_TextBox.Text);
+                if (Pictures.Checked) MoveDirectory("My Pictures", -113, "imageres.dll", Pictures_TextBox.Text);
+                if (Videos.Checked) MoveDirectory("My Video", -189, "imageres.dll", Videos_TextBox.Text);
+                if (Music.Checked) MoveDirectory("My Music", -108, "imageres.dll", Music_TextBox.Text);
+                if (Links.Checked) MoveDirectory("{BFB9D5E0-C6A9-404C-B2B2-AE6DB6AF4968}", -185, "imageres.dll", Links_TextBox.Text);
+                if (Favorites.Checked) MoveDirectory("Favorites", -173, "shell32.dll", Favorites_TextBox.Text);
+                if (Searches.Checked) MoveDirectory("{7D1D3A04-DEBB-4115-95CF-2F29DA2920DA}", -18, "imageres.dll", Searches.Text);
+                if (SavedGames.Checked) MoveDirectory("{4C5C32FF-BB9D-43B0-B5B4-2D72E54EAAA4}", -186, "imageres.dll", SavedGames.Text);
+                if (Contacts.Checked) MoveDirectory("{56784854-C6CB-462B-8169-88E350ACB882}", -181, "imageres.dll", Contacts_TextBox.Text);
+                if (Objects.Checked) MoveDirectory("{31C0DD25-9439-4F12-BF41-7FF4EDA38722}", -108, "imageres.dll", Objects_TextBox.Text);
+            }
+        }
+
+
+        private void CopyFolder(string sourceFolder, string destFolder, string registryName)
+        {
+            if (Directory.Exists(sourceFolder))
+            {
+                string[] files = Directory.GetFiles(sourceFolder);
+                foreach (string file in files)
+                {
+                    string name = Path.GetFileName(file);
+                    if (name != "desktop.ini")
+                    {
+                        string dest = Path.Combine(destFolder, name);
+                        File.Copy(file, dest, true);
+                    }
+                }
+                string[] folders = Directory.GetDirectories(sourceFolder);
+                foreach (string folder in folders)
+                {
+                    if (Directory.Exists(folder)) //This is needed to avoid bugs in Documents, where it tries to move My Music and My Pictures... even though they are not there
+                    {
+                        string name = Path.GetFileName(folder);
+                        string dest = Path.Combine(destFolder, name);
+                        Directory.Move(folder, dest);
+                    }
+                }
+            }
+        }
+        private void MoveDirectory(string registryName, int iconNumber, string dllName, string individualLocation)
+        {
+            string location="",sourceDir = "", folderName = getFolderName(registryName);
+            RegistryKey key = Microsoft.Win32.Registry.CurrentUser.CreateSubKey("Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\User Shell Folders\\");
+
+
+            if (key.GetValueNames().Contains(registryName) == false){
+                sourceDir = System.Environment.GetEnvironmentVariable("USERPROFILE") + '\\' + folderName;
+            }
+            else { sourceDir = key.GetValue(registryName).ToString(); }
+
+            string[] split = sourceDir.Split('\\');
+
+            location = LocationTextBox.Text + split[split.Length - 1];
+            
+            System.Windows.Forms.MessageBox.Show(location);
+             
+            if (!Directory.Exists(location)) { Directory.CreateDirectory(location); }
+
+            key.SetValue(registryName, location);
+            key.Close();
+
+            key = Microsoft.Win32.Registry.CurrentUser.CreateSubKey("Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Shell Folders\\");
+
+            if (key.GetValueNames().Contains(registryName) == false)
+            {
+                sourceDir = System.Environment.GetEnvironmentVariable("USERPROFILE") + '\\' + folderName;
+            }
+            else { sourceDir = key.GetValue(registryName).ToString(); }
+
+            split = sourceDir.Split('\\');
+            location = LocationTextBox.Text + split[split.Length - 1];
+
+            key.SetValue(registryName, location);
+            key.Close();
+
+            System.Windows.Forms.MessageBox.Show("Attempting to delete desktop.ini");
+            RemoveDesktopIni(location);
+            System.Windows.Forms.MessageBox.Show("Deleted desktop.ini");
+
+
+            string[] lines = {"[.ShellClassInfo]",
+                "IconResource=%SystemRoot%\\system32\\" + dllName + "," + iconNumber,
+                "LocalizedResourceName=" + split[split.Length-1]};
+            File.WriteAllLines(location + @"\desktop.ini", lines);
+            SetAttrib(location);
+            CopyFolder(sourceDir, location, registryName);
+            DeleteFolder(sourceDir);
+        }
+
+       private string getFolderName(string registryName)
+        {
+            string folderName = "";
+            RegistryKey key = Microsoft.Win32.Registry.CurrentUser.CreateSubKey("Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\User Shell Folders\\");
+
+            if (registryName == "{BFB9D5E0-C6A9-404C-B2B2-AE6DB6AF4968}") { folderName = "Links"; }
+            else if (registryName == "{7D1D3A04-DEBB-4115-95CF-2F29DA2920DA}") { folderName = "Searches"; }
+            else if (registryName == "{4C5C32FF-BB9D-43B0-B5B4-2D72E54EAAA4}") { folderName = "Saved Games"; }
+            else if (registryName == "{56784854-C6CB-462B-8169-88E350ACB882}") { folderName = "Contacts"; }
+            else if (registryName == "{31C0DD25-9439-4F12-BF41-7FF4EDA38722}") { folderName = "3D Objects"; }
+            else { folderName = registryName; }
+
+            return folderName;
+        }
+        private void SetAttrib(string location)
+        {
+            string command1 = "attrib +r +s +h  " + '"' + location + @"\desktop.ini" + '"';
+            string command2 = "attrib +r " + '"' + location + '"';
+
+            System.Diagnostics.Process p = new System.Diagnostics.Process();
+            System.Diagnostics.ProcessStartInfo info = new System.Diagnostics.ProcessStartInfo();
+            info.WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden;
+            info.CreateNoWindow = true;
+            info.UseShellExecute = false;
+            info.FileName = "cmd.exe";
+            info.RedirectStandardInput = true;
+            info.UseShellExecute = false;
+            
+            p.StartInfo = info;
+            p.Start();
+
+            using (StreamWriter sw = p.StandardInput)
+            {
+                if (sw.BaseStream.CanWrite)
+                {
+                    sw.WriteLine(command1);
+                    sw.WriteLine(command2);
+                }
+            }
+        }
+
+        private void RemoveDesktopIni(string location)
+        {
+            string command1 = "attrib -s -r -h  " + '"' + location + @"\desktop.ini" + '"';
+            string command2 = "del -s -r -h  " + '"' + location + @"\desktop.ini" + '"';
+
+            System.Diagnostics.Process p = new System.Diagnostics.Process();
+            System.Diagnostics.ProcessStartInfo info = new System.Diagnostics.ProcessStartInfo();
+            info.WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden;
+            info.CreateNoWindow = true;
+            info.UseShellExecute = false;
+            info.FileName = "cmd.exe";
+            info.RedirectStandardInput = true;
+            info.UseShellExecute = false;
+
+            p.StartInfo = info;
+            p.Start();
+
+            using (StreamWriter sw = p.StandardInput)
+            {
+                if (sw.BaseStream.CanWrite)
+                {
+                    sw.WriteLine(command1);
+                    sw.WriteLine(command2);
+                }
+            }
+        }
+
+        private void DeleteFolder(string location)
+        {
+            string command1 = "rmdir " + '"' + location + '"' + " /s /Q";
+
+            System.Diagnostics.Process p = new System.Diagnostics.Process();
+            System.Diagnostics.ProcessStartInfo info = new System.Diagnostics.ProcessStartInfo();
+            info.WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden;
+            info.CreateNoWindow = true;
+            info.UseShellExecute = false;
+            info.FileName = "cmd.exe";
+            info.RedirectStandardInput = true;
+            info.UseShellExecute = false;
+
+            p.StartInfo = info;
+            p.Start();
+
+            using (StreamWriter sw = p.StandardInput)
+            {
+                if (sw.BaseStream.CanWrite)
+                {
+                    sw.WriteLine(command1);
+                }
+            }
+        }
         //Button Clicks
         private void DesktopButton_Click(object sender, EventArgs e)
         {
             LocationBrowserDialog.ShowDialog();
-            Desktop_TextBox.Text = LocationBrowserDialog.SelectedPath + "\\Desktop";
+            Desktop_TextBox.Text = LocationBrowserDialog.SelectedPath + "Desktop";
         }
 
         private void DownloadsButton_Click(object sender, EventArgs e)
         {
             LocationBrowserDialog.ShowDialog();
-            Downloads_TextBox.Text = LocationBrowserDialog.SelectedPath + "\\Downloads";
+            Downloads_TextBox.Text = LocationBrowserDialog.SelectedPath + "Downloads";
         }
 
         private void DocumentsButton_Click(object sender, EventArgs e)
         {
             LocationBrowserDialog.ShowDialog();
-            Documents_TextBox.Text = LocationBrowserDialog.SelectedPath + "\\Documents";
+            Documents_TextBox.Text = LocationBrowserDialog.SelectedPath + "Documents";
         }
 
         private void PicturesButton_Click(object sender, EventArgs e)
         {
             LocationBrowserDialog.ShowDialog();
-            Pictures_TextBox.Text = LocationBrowserDialog.SelectedPath + "\\Pictures";
+            Pictures_TextBox.Text = LocationBrowserDialog.SelectedPath + "Pictures";
         }
 
         private void VideosButton_Click(object sender, EventArgs e)
         {
             LocationBrowserDialog.ShowDialog();
-            Videos_TextBox.Text = LocationBrowserDialog.SelectedPath + "\\Videos";
+            Videos_TextBox.Text = LocationBrowserDialog.SelectedPath + "Videos";
         }
 
         private void MusicButton_Click(object sender, EventArgs e)
         {
             LocationBrowserDialog.ShowDialog();
-            Music_TextBox.Text = LocationBrowserDialog.SelectedPath + "\\Music";
+            Music_TextBox.Text = LocationBrowserDialog.SelectedPath + "Music";
         }
 
         private void Links_Button_Click(object sender, EventArgs e)
         {
             LocationBrowserDialog.ShowDialog();
-            Links_TextBox.Text = LocationBrowserDialog.SelectedPath + "\\Links";
+            Links_TextBox.Text = LocationBrowserDialog.SelectedPath + "Links";
         }
 
         private void Favorites_Button_Click(object sender, EventArgs e)
         {
             LocationBrowserDialog.ShowDialog();
-            Favorites_TextBox.Text = LocationBrowserDialog.SelectedPath + "\\Favorites";
+            Favorites_TextBox.Text = LocationBrowserDialog.SelectedPath + "Favorites";
         }
 
         private void Searches_Button_Click(object sender, EventArgs e)
         {
             LocationBrowserDialog.ShowDialog();
-            Searches_TextBox.Text = LocationBrowserDialog.SelectedPath + "\\Searches";
+            Searches_TextBox.Text = LocationBrowserDialog.SelectedPath + "Searches";
         }
 
         private void SavedGames_Button_Click(object sender, EventArgs e)
         {
             LocationBrowserDialog.ShowDialog();
-            SavedGames_TextBox.Text = LocationBrowserDialog.SelectedPath + "\\Saved Games";
+            SavedGames_TextBox.Text = LocationBrowserDialog.SelectedPath + "Saved Games";
         }
 
         private void Contacts_Button_Click(object sender, EventArgs e)
         {
             LocationBrowserDialog.ShowDialog();
-            Contacts_TextBox.Text = LocationBrowserDialog.SelectedPath + "\\Contacts";
+            Contacts_TextBox.Text = LocationBrowserDialog.SelectedPath + "Contacts";
         }
 
         private void Objects_Button_Click(object sender, EventArgs e)
         {
             LocationBrowserDialog.ShowDialog();
-            Objects_TextBox.Text = LocationBrowserDialog.SelectedPath + "\\3D Objects";
+            Objects_TextBox.Text = LocationBrowserDialog.SelectedPath + "3D Objects";
         }
 
         //Checkbox changes
@@ -327,7 +533,7 @@ namespace MoveDefaultUserFolders
         {
             CheckBox checkbox = (CheckBox)sender;
             if (!selected)
-            { 
+            {
                 Desktop_TextBox.Enabled = checkbox.Checked;
                 Desktop_Button.Enabled = checkbox.Checked;
             }
@@ -475,133 +681,6 @@ namespace MoveDefaultUserFolders
             if (!checkBox.Checked) UncheckAll(GroupBox);
         }
 
-        //Move methods
-        //TODO: Delete old folders
-        public static void CopyFolder(string sourceFolder, string destFolder)
-        {
-            string[] files = Directory.GetFiles(sourceFolder);
-            foreach (string file in files)
-            {
-                
-                string name = Path.GetFileName(file);
-                if(name != "desktop.ini")
-                { 
-                string dest = Path.Combine(destFolder, name);
-                File.Copy(file, dest);
-                }
-            }
-            string[] folders = Directory.GetDirectories(sourceFolder);
-            foreach (string folder in folders)
-            {
-                string name = Path.GetFileName(folder);
-                string dest = Path.Combine(destFolder, name);
-                CopyFolder(folder, dest);
-               
-            }
-        }
-        //Todo: fix documents
-        //check if right side works
-        private void MoveFolders()
-        {
-            if (Desktop.Checked) MoveDirectory("Desktop",-183);
-            if (Downloads.Checked) MoveDirectory("{374DE290-123F-4565-9164-39C4925E467B}",-184);
-            if (Documents.Checked) MoveDirectory("Personal", -112);
-            if (Pictures.Checked) MoveDirectory("My Pictures", -113);
-            if (Videos.Checked) MoveDirectory("My Video", -189);
-            if (Music.Checked) MoveDirectory("My Music", -108);
-            if (Links.Checked) MoveDirectory("{BFB9D5E0-C6A9-404C-B2B2-AE6DB6AF4968}", -189);
-            if (Favorites.Checked) MoveDirectory("Favorites", -173);
-            if (Searches.Checked) MoveDirectory("{7D1D3A04-DEBB-4115-95CF-2F29DA2920DA}", -18);
-            if (SavedGames.Checked) MoveDirectory("{4C5C32FF-BB9D-43B0-B5B4-2D72E54EAAA4}", -186);
-            if (Contacts.Checked) MoveDirectory("{56784854-C6CB-462B-8169-88E350ACB882}", -181);
-            if (Objects.Checked) MoveDirectory("{31C0DD25-9439-4F12-BF41-7FF4EDA38722}", -108);
-        }
-
-        private void MoveDirectory(string registryName, int iconNumber)
-        {
-            string location,sourceDir = "";
-            RegistryKey key = Microsoft.Win32.Registry.CurrentUser.CreateSubKey("Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\User Shell Folders\\");
-            if(key == null){
-                string folderName="";
-                if (registryName == "{BFB9D5E0-C6A9-404C-B2B2-AE6DB6AF4968}") { folderName = "\\Links"; }
-                if (registryName == "{7D1D3A04-DEBB-4115-95CF-2F29DA2920DA}") { folderName = "\\Searches"; }
-                if (registryName == "{4C5C32FF-BB9D-43B0-B5B4-2D72E54EAAA4}") { folderName = "\\Saved Games"; }
-                if (registryName == "{56784854-C6CB-462B-8169-88E350ACB882}") { folderName = "\\Contacts"; }
-                if (registryName == "{31C0DD25-9439-4F12-BF41-7FF4EDA38722}") { folderName = "\\3D Objects"; }
-                else { folderName = registryName; }
-                sourceDir = System.Environment.GetEnvironmentVariable("USERPROFILE") + folderName;
-                System.Windows.Forms.MessageBox.Show(System.Environment.GetEnvironmentVariable("USERPROFILE") + folderName);
-            }
-
-            sourceDir = key.GetValue(registryName).ToString();
-            string[] split = sourceDir.Split('\\');
-
-            location = LocationTextBox.Text + '\\' + split[split.Length - 1];
-            
-            if (split.Length == 2) {location = LocationTextBox.Text + split[split.Length - 1]; }
-            System.Windows.Forms.MessageBox.Show(split.Length.ToString()) ;
-
-
-            if (!Directory.Exists(location)) { Directory.CreateDirectory(location); }
-
-            key.SetValue(registryName, location);
-            key.Close();
-            key = Microsoft.Win32.Registry.CurrentUser.CreateSubKey("Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Shell Folders\\");
-            key.SetValue(registryName, location);
-            key.Close();
-
-            if (File.Exists(location + '\\' + "desktop.ini"))
-            {
-                RemoveAttrib(location);
-                File.Delete(location + '\\' + "desktop.ini");
-            }
-            string[] lines = {"[.ShellClassInfo]",
-                "IconResource=%SystemRoot%\\system32\\imageres.dll," + iconNumber,
-                "LocalizedResourceName=" + split[split.Length-1]};
-            File.WriteAllLines(location + @"\desktop.ini", lines);
-            SetAttrib(location);
-            CopyFolder(sourceDir, location);
-
-            DirectoryInfo directory = new DirectoryInfo(sourceDir);
-            directory.GetFiles().ToList().ForEach(f => f.Delete());
-        }
-
-        private void SetAttrib(string location)
-        {
-            string command1 = "attrib +r +s +h  " + '"' + location + @"\desktop.ini" + '"';
-            string command2 = "attrib +r " + '"' + location + '"';
-
-            System.Diagnostics.Process p = new System.Diagnostics.Process();
-            System.Diagnostics.ProcessStartInfo info = new System.Diagnostics.ProcessStartInfo();
-            info.WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden;
-            info.CreateNoWindow = true;
-            info.UseShellExecute = false;
-            info.FileName = "cmd.exe";
-            info.RedirectStandardInput = true;
-            info.UseShellExecute = false;
-            
-            p.StartInfo = info;
-            p.Start();
-
-            using (StreamWriter sw = p.StandardInput)
-            {
-                if (sw.BaseStream.CanWrite)
-                {
-                    sw.WriteLine(command1);
-                    sw.WriteLine(command2);
-                }
-            }
-        }
-
-        private void RemoveAttrib(string location)
-        {
-            System.Diagnostics.Process process = new System.Diagnostics.Process();
-            System.Diagnostics.ProcessStartInfo startInfo = new System.Diagnostics.ProcessStartInfo();
-            startInfo.WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden;
-            startInfo.FileName = "cmd.exe";
-            startInfo.Arguments = "attrib -r -s -h  " + '"' + location + @"\desktop.ini" + '"'; ;
-            process.StartInfo = startInfo;
-            process.Start();
-        }
     }
+
 }
