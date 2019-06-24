@@ -1,15 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
 using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 using System.Security.Principal;
 using Microsoft.Win32;
 using System.IO;
-//TODO: Fix Common registry files
 namespace MoveDefaultUserFolders
 {
     public partial class Form1 : Form
@@ -255,12 +250,14 @@ namespace MoveDefaultUserFolders
         //Move methods
         private void MoveFolders()
         {
+            if(selectionCounter == 0) { System.Windows.Forms.MessageBox.Show("Select something to move!", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Error); }
             progressBar.Value = 0;
             double helper = 100 / selectionCounter; 
             int percent = (int)Math.Round(helper);
 
             if (YesRadioButton.Checked)
             {
+                //Some Windows Operating Systems use different registry names. Check if Desktop exists
                 if (Desktop.Checked) { MoveDirectory("Desktop", -183, "imageres.dll", ""); progressBar.Value += percent; }
                 if (Downloads.Checked) { MoveDirectory("{374DE290-123F-4565-9164-39C4925E467B}", -184, "imageres.dll", ""); progressBar.Value += percent; }
                 if (Documents.Checked) { MoveDirectory("Personal", -112, "imageres.dll", ""); progressBar.Value += percent; }
@@ -286,8 +283,8 @@ namespace MoveDefaultUserFolders
                 if (Music.Checked) { MoveDirectory("My Music", -108, "imageres.dll", Music_TextBox.Text); progressBar.Value += percent; }
                 if (Links.Checked) { MoveDirectory("{BFB9D5E0-C6A9-404C-B2B2-AE6DB6AF4968}", -185, "imageres.dll", Links_TextBox.Text); progressBar.Value += percent; }
                 if (Favorites.Checked) { MoveDirectory("Favorites", -173, "shell32.dll", Favorites_TextBox.Text); progressBar.Value += percent; }
-                if (Searches.Checked) { MoveDirectory("{7D1D3A04-DEBB-4115-95CF-2F29DA2920DA}", -18, "imageres.dll", Searches.Text); progressBar.Value += percent; }
-                if (SavedGames.Checked) { MoveDirectory("{4C5C32FF-BB9D-43B0-B5B4-2D72E54EAAA4}", -186, "imageres.dll", SavedGames.Text); progressBar.Value += percent; }
+                if (Searches.Checked) { MoveDirectory("{7D1D3A04-DEBB-4115-95CF-2F29DA2920DA}", -18, "imageres.dll", Searches_TextBox.Text); progressBar.Value += percent; }
+                if (SavedGames.Checked) { MoveDirectory("{4C5C32FF-BB9D-43B0-B5B4-2D72E54EAAA4}", -186, "imageres.dll", SavedGames_TextBox.Text); progressBar.Value += percent; }
                 if (Contacts.Checked) { MoveDirectory("{56784854-C6CB-462B-8169-88E350ACB882}", -181, "imageres.dll", Contacts_TextBox.Text); progressBar.Value += percent; }
                 if (Objects.Checked) { MoveDirectory("{31C0DD25-9439-4F12-BF41-7FF4EDA38722}", -108, "imageres.dll", Objects_TextBox.Text); progressBar.Value += percent; }
                 if (error) progressBar.Value = 0;
@@ -324,7 +321,8 @@ namespace MoveDefaultUserFolders
         private bool error;
         private void MoveDirectory(string registryName, int iconNumber, string dllName, string individualLocation)
         {
-            string location="",sourceDir = "", folderName = getFolderName(registryName);
+            error = false;
+            string location="",sourceDir = "", folderName = GetFolderName(registryName);
             RegistryKey key = Microsoft.Win32.Registry.CurrentUser.CreateSubKey("Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\User Shell Folders\\");
 
 
@@ -340,8 +338,6 @@ namespace MoveDefaultUserFolders
             if (sourceDir == location) { System.Windows.Forms.MessageBox.Show("The new folder must be different from the current folder!\n(" + split[split.Length - 1] + ")", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error); error = true; return; }
             else
             {
-                
-             
                 if (!Directory.Exists(location)) { Directory.CreateDirectory(location); }
 
                 key.SetValue(registryName, location);
@@ -378,10 +374,9 @@ namespace MoveDefaultUserFolders
             }
         }
 
-       private string getFolderName(string registryName)
+       private string GetFolderName(string registryName)
         {
             string folderName = "";
-            RegistryKey key = Microsoft.Win32.Registry.CurrentUser.CreateSubKey("Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Shell Folders\\");
 
             if (registryName == "{374DE290-123F-4565-9164-39C4925E467B}") { folderName = "Downloads"; }
             else if (registryName == "Personal") { folderName = "Documents"; }
@@ -399,178 +394,151 @@ namespace MoveDefaultUserFolders
         }
         private void SetAttrib(string location)
         {
-            string command1 = "attrib +r +s +h  " + '"' + location + @"\desktop.ini" + '"';
-            string command2 = "attrib +r " + '"' + location + '"';
+            string command1 = "/c attrib +s +r +h  " + '"' + location + @"\desktop.ini" + '"';
+            string command2 = "/c attrib +r " + '"' + location + '"';
 
-            System.Diagnostics.Process p = new System.Diagnostics.Process();
-            System.Diagnostics.ProcessStartInfo info = new System.Diagnostics.ProcessStartInfo();
-            info.WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden;
-            info.CreateNoWindow = true;
-            info.UseShellExecute = false;
-            info.FileName = "cmd.exe";
-            info.RedirectStandardInput = true;
-            info.UseShellExecute = false;
-            
-            p.StartInfo = info;
-            p.Start();
+            System.Diagnostics.ProcessStartInfo procStartInfo = new System.Diagnostics.ProcessStartInfo("cmd", command1);
+            //For some reason, if I have them in the same attribute, the folder does not get the read only attribute
+            procStartInfo.RedirectStandardOutput = true;
+            procStartInfo.UseShellExecute = false;
+            procStartInfo.CreateNoWindow = true;
 
-            using (StreamWriter sw = p.StandardInput)
-            {
-                if (sw.BaseStream.CanWrite)
-                {
-                    sw.WriteLine(command1);
-                    sw.WriteLine(command2);
-                    sw.WriteLine(command2); // On different languages, I had issues of this not going off as it should
-                }
-            }
+            System.Diagnostics.Process.Start(procStartInfo);
+
+            procStartInfo = new System.Diagnostics.ProcessStartInfo("cmd", command2);
+            procStartInfo.RedirectStandardOutput = true;
+            procStartInfo.UseShellExecute = false;
+            procStartInfo.CreateNoWindow = true;
+
+            System.Diagnostics.Process.Start(procStartInfo);
         }
 
         private void RemoveDesktopIni(string location)
         {
-            string command1 = "attrib -s -r -h  " + '"' + location + @"\desktop.ini" + '"';
-            string command2 = "del -s -r -h  " + '"' + location + @"\desktop.ini" + '"';
+            location = location.Remove(location.Length - 1);
 
-            System.Diagnostics.Process p = new System.Diagnostics.Process();
-            System.Diagnostics.ProcessStartInfo info = new System.Diagnostics.ProcessStartInfo();
-            info.WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden;
-            info.CreateNoWindow = true;
-            info.UseShellExecute = false;
-            info.FileName = "cmd.exe";
-            info.RedirectStandardInput = true;
-            info.UseShellExecute = false;
+            string command1 = "/c attrib -s -r -h  " + '"' + location + @"\desktop.ini" + '"';
+            string command2 = "/c del -s -r -h  " + '"' + location + @"\desktop.ini" + '"';
 
-            p.StartInfo = info;
-            p.Start();
+            string arguments = command1 + "&&" + command2;
+            System.Diagnostics.ProcessStartInfo procStartInfo = new System.Diagnostics.ProcessStartInfo("cmd", arguments);
 
-            using (StreamWriter sw = p.StandardInput)
-            {
-                if (sw.BaseStream.CanWrite)
-                {
-                    sw.WriteLine(command1);
-                    sw.WriteLine(command2);
-                }
-            }
+            procStartInfo.RedirectStandardOutput = true;
+            procStartInfo.UseShellExecute = false;
+            procStartInfo.CreateNoWindow = true;
+
+            System.Diagnostics.Process.Start(procStartInfo);
         }
 
         private void DeleteFolder(string location)
         {
-            string command1 = "rmdir " + '"' + location + '"' + " /s /Q";
+            string command1 = "/c rmdir " + '"' + location + '"' + " /s /Q";
 
-            System.Diagnostics.Process p = new System.Diagnostics.Process();
-            System.Diagnostics.ProcessStartInfo info = new System.Diagnostics.ProcessStartInfo();
-            info.WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden;
-            info.CreateNoWindow = true;
-            info.UseShellExecute = false;
-            info.FileName = "cmd.exe";
-            info.RedirectStandardInput = true;
-            info.UseShellExecute = false;
+            string arguments = command1;
+            System.Diagnostics.ProcessStartInfo procStartInfo = new System.Diagnostics.ProcessStartInfo("cmd", arguments);
 
-            p.StartInfo = info;
-            p.Start();
+            procStartInfo.RedirectStandardOutput = true;
+            procStartInfo.UseShellExecute = false;
+            procStartInfo.CreateNoWindow = true;
 
-            using (StreamWriter sw = p.StandardInput)
-            {
-                if (sw.BaseStream.CanWrite)
-                {
-                    sw.WriteLine(command1);
-                }
-            }
+            System.Diagnostics.Process.Start(procStartInfo);
         }
+
         //Button Clicks
         private void DesktopButton_Click(object sender, EventArgs e)
         {
             LocationBrowserDialog.ShowDialog();
             string[] lengthHelper = (LocationBrowserDialog.SelectedPath + '\\').Split('\\');
-            if (!(lengthHelper[1].Length == 0)) { Desktop_TextBox.Text = LocationBrowserDialog.SelectedPath + '\\' + getFolderName("Desktop"); }
-            else { Desktop_TextBox.Text = LocationBrowserDialog.SelectedPath + getFolderName("Desktop"); }
+            if (!(lengthHelper[1].Length == 0)) { Desktop_TextBox.Text = LocationBrowserDialog.SelectedPath + '\\' + GetFolderName("Desktop"); }
+            else { Desktop_TextBox.Text = LocationBrowserDialog.SelectedPath + GetFolderName("Desktop"); }
         }
 
         private void DownloadsButton_Click(object sender, EventArgs e)
         {
             LocationBrowserDialog.ShowDialog();
             string[] lengthHelper = (LocationBrowserDialog.SelectedPath + '\\').Split('\\');
-            if (!(lengthHelper[1].Length == 0)) { Downloads_TextBox.Text = LocationBrowserDialog.SelectedPath + '\\' + getFolderName("{374DE290-123F-4565-9164-39C4925E467B}"); }
-            else { Downloads_TextBox.Text = LocationBrowserDialog.SelectedPath + getFolderName("{374DE290-123F-4565-9164-39C4925E467B}"); }
+            if (!(lengthHelper[1].Length == 0)) { Downloads_TextBox.Text = LocationBrowserDialog.SelectedPath + '\\' + GetFolderName("{374DE290-123F-4565-9164-39C4925E467B}"); }
+            else { Downloads_TextBox.Text = LocationBrowserDialog.SelectedPath + GetFolderName("{374DE290-123F-4565-9164-39C4925E467B}"); }
         }
 
         private void DocumentsButton_Click(object sender, EventArgs e)
         {
             LocationBrowserDialog.ShowDialog();
             string[] lengthHelper = (LocationBrowserDialog.SelectedPath + '\\').Split('\\');
-            if (!(lengthHelper[1].Length == 0)) { Documents_TextBox.Text = LocationBrowserDialog.SelectedPath + '\\' + getFolderName("Personal"); }
-            else { Documents_TextBox.Text = LocationBrowserDialog.SelectedPath + getFolderName("Personal"); }
+            if (!(lengthHelper[1].Length == 0)) { Documents_TextBox.Text = LocationBrowserDialog.SelectedPath + '\\' + GetFolderName("Personal"); }
+            else { Documents_TextBox.Text = LocationBrowserDialog.SelectedPath + GetFolderName("Personal"); }
         }
 
         private void PicturesButton_Click(object sender, EventArgs e)
         {
             LocationBrowserDialog.ShowDialog();
             string[] lengthHelper = (LocationBrowserDialog.SelectedPath + '\\').Split('\\');
-            if (!(lengthHelper[1].Length == 0)) { Pictures_TextBox.Text = LocationBrowserDialog.SelectedPath + '\\' + getFolderName("My Pictures"); }
-            else { Pictures_TextBox.Text = LocationBrowserDialog.SelectedPath + getFolderName("My Pictures"); }
+            if (!(lengthHelper[1].Length == 0)) { Pictures_TextBox.Text = LocationBrowserDialog.SelectedPath + '\\' + GetFolderName("My Pictures"); }
+            else { Pictures_TextBox.Text = LocationBrowserDialog.SelectedPath + GetFolderName("My Pictures"); }
         }
 
         private void VideosButton_Click(object sender, EventArgs e)
         {
             LocationBrowserDialog.ShowDialog();
             string[] lengthHelper = (LocationBrowserDialog.SelectedPath + '\\').Split('\\');
-            if (!(lengthHelper[1].Length == 0)) { Videos_TextBox.Text = LocationBrowserDialog.SelectedPath + '\\' + getFolderName("My Video"); }
-            else { Videos_TextBox.Text = LocationBrowserDialog.SelectedPath + getFolderName("My Video"); }
+            if (!(lengthHelper[1].Length == 0)) { Videos_TextBox.Text = LocationBrowserDialog.SelectedPath + '\\' + GetFolderName("My Video"); }
+            else { Videos_TextBox.Text = LocationBrowserDialog.SelectedPath + GetFolderName("My Video"); }
         }
 
         private void MusicButton_Click(object sender, EventArgs e)
         {
             LocationBrowserDialog.ShowDialog();
             string[] lengthHelper = (LocationBrowserDialog.SelectedPath + '\\').Split('\\');
-            if (!(lengthHelper[1].Length == 0)) { Music_TextBox.Text = LocationBrowserDialog.SelectedPath + '\\' + getFolderName("My Music"); }
-            else { Music_TextBox.Text = LocationBrowserDialog.SelectedPath + getFolderName("My Music"); }
+            if (!(lengthHelper[1].Length == 0)) { Music_TextBox.Text = LocationBrowserDialog.SelectedPath + '\\' + GetFolderName("My Music"); }
+            else { Music_TextBox.Text = LocationBrowserDialog.SelectedPath + GetFolderName("My Music"); }
         }
 
         private void Links_Button_Click(object sender, EventArgs e)
         {
             LocationBrowserDialog.ShowDialog();
             string[] lengthHelper = (LocationBrowserDialog.SelectedPath + '\\').Split('\\');
-            if (!(lengthHelper[1].Length == 0)) { Links_TextBox.Text = LocationBrowserDialog.SelectedPath + '\\' + getFolderName("{BFB9D5E0-C6A9-404C-B2B2-AE6DB6AF4968}"); }
-            else { Links_TextBox.Text = LocationBrowserDialog.SelectedPath + getFolderName("{BFB9D5E0-C6A9-404C-B2B2-AE6DB6AF4968}"); }
+            if (!(lengthHelper[1].Length == 0)) { Links_TextBox.Text = LocationBrowserDialog.SelectedPath + '\\' + GetFolderName("{BFB9D5E0-C6A9-404C-B2B2-AE6DB6AF4968}"); }
+            else { Links_TextBox.Text = LocationBrowserDialog.SelectedPath + GetFolderName("{BFB9D5E0-C6A9-404C-B2B2-AE6DB6AF4968}"); }
         }
 
         private void Favorites_Button_Click(object sender, EventArgs e)
         {
             LocationBrowserDialog.ShowDialog();
             string[] lengthHelper = (LocationBrowserDialog.SelectedPath + '\\').Split('\\');
-            if (!(lengthHelper[1].Length == 0)) { Favorites_TextBox.Text = LocationBrowserDialog.SelectedPath + '\\' + getFolderName("Favorites"); }
-            else { Favorites_TextBox.Text = LocationBrowserDialog.SelectedPath + getFolderName("Favorites"); }
+            if (!(lengthHelper[1].Length == 0)) { Favorites_TextBox.Text = LocationBrowserDialog.SelectedPath + '\\' + GetFolderName("Favorites"); }
+            else { Favorites_TextBox.Text = LocationBrowserDialog.SelectedPath + GetFolderName("Favorites"); }
         }
 
         private void Searches_Button_Click(object sender, EventArgs e)
         {
             LocationBrowserDialog.ShowDialog();
             string[] lengthHelper = (LocationBrowserDialog.SelectedPath + '\\').Split('\\');
-            if (!(lengthHelper[1].Length == 0)) { Searches_TextBox.Text = LocationBrowserDialog.SelectedPath + '\\' + getFolderName("{7D1D3A04-DEBB-4115-95CF-2F29DA2920DA}"); }
-            else { Searches_TextBox.Text = LocationBrowserDialog.SelectedPath + getFolderName("{7D1D3A04-DEBB-4115-95CF-2F29DA2920DA}"); }
+            if (!(lengthHelper[1].Length == 0)) { Searches_TextBox.Text = LocationBrowserDialog.SelectedPath + '\\' + GetFolderName("{7D1D3A04-DEBB-4115-95CF-2F29DA2920DA}"); }
+            else { Searches_TextBox.Text = LocationBrowserDialog.SelectedPath + GetFolderName("{7D1D3A04-DEBB-4115-95CF-2F29DA2920DA}"); }
         }
 
         private void SavedGames_Button_Click(object sender, EventArgs e)
         {
             LocationBrowserDialog.ShowDialog();
             string[] lengthHelper = (LocationBrowserDialog.SelectedPath + '\\').Split('\\');
-            if (!(lengthHelper[1].Length == 0)) { SavedGames_TextBox.Text = LocationBrowserDialog.SelectedPath + '\\' + getFolderName("{4C5C32FF-BB9D-43B0-B5B4-2D72E54EAAA4}"); }
-            else { SavedGames_TextBox.Text = LocationBrowserDialog.SelectedPath + getFolderName("{4C5C32FF-BB9D-43B0-B5B4-2D72E54EAAA4}"); }
+            if (!(lengthHelper[1].Length == 0)) { SavedGames_TextBox.Text = LocationBrowserDialog.SelectedPath + '\\' + GetFolderName("{4C5C32FF-BB9D-43B0-B5B4-2D72E54EAAA4}"); }
+            else { SavedGames_TextBox.Text = LocationBrowserDialog.SelectedPath + GetFolderName("{4C5C32FF-BB9D-43B0-B5B4-2D72E54EAAA4}"); }
         }
 
         private void Contacts_Button_Click(object sender, EventArgs e)
         {
             LocationBrowserDialog.ShowDialog();
             string[] lengthHelper = (LocationBrowserDialog.SelectedPath + '\\').Split('\\');
-            if (!(lengthHelper[1].Length == 0)) { Contacts_TextBox.Text = LocationBrowserDialog.SelectedPath + '\\' + getFolderName("{56784854-C6CB-462B-8169-88E350ACB882}"); }
-            else { Contacts_TextBox.Text = LocationBrowserDialog.SelectedPath + getFolderName("{56784854-C6CB-462B-8169-88E350ACB882}"); }
+            if (!(lengthHelper[1].Length == 0)) { Contacts_TextBox.Text = LocationBrowserDialog.SelectedPath + '\\' + GetFolderName("{56784854-C6CB-462B-8169-88E350ACB882}"); }
+            else { Contacts_TextBox.Text = LocationBrowserDialog.SelectedPath + GetFolderName("{56784854-C6CB-462B-8169-88E350ACB882}"); }
         }
 
         private void Objects_Button_Click(object sender, EventArgs e)
         {
             LocationBrowserDialog.ShowDialog();
             string[] lengthHelper = (LocationBrowserDialog.SelectedPath + '\\').Split('\\');
-            if (!(lengthHelper[1].Length == 0)) { Objects_TextBox.Text = LocationBrowserDialog.SelectedPath + '\\' + getFolderName("{31C0DD25-9439-4F12-BF41-7FF4EDA38722}"); }
-            else { Objects_TextBox.Text = LocationBrowserDialog.SelectedPath + getFolderName("{31C0DD25-9439-4F12-BF41-7FF4EDA38722}"); }
+            if (!(lengthHelper[1].Length == 0)) { Objects_TextBox.Text = LocationBrowserDialog.SelectedPath + '\\' + GetFolderName("{31C0DD25-9439-4F12-BF41-7FF4EDA38722}"); }
+            else { Objects_TextBox.Text = LocationBrowserDialog.SelectedPath + GetFolderName("{31C0DD25-9439-4F12-BF41-7FF4EDA38722}"); }
         }
 
         //Checkbox changes

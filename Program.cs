@@ -17,8 +17,9 @@ namespace MoveDefaultUserFolders
         Application.SetCompatibleTextRenderingDefault(false);
         Form mainForm = new Form1();
         Form infoForm = new infoForm();
-            
+         
         Application.Run(mainForm);
+        mainForm.IsMdiContainer = true;
         infoForm.MdiParent = mainForm;
         }
 

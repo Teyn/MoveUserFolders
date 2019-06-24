@@ -118,6 +118,7 @@
     <Content Include="Icons\Favorites.ico" />
     <Content Include="Icons\GitHub.ico" />
     <Content Include="Icons\Info.ico" />
+    <Content Include="Icons\LinkedIn.ico" />
     <Content Include="Icons\Links.ico" />
     <Content Include="Icons\Music.ico" />
     <Content Include="Icons\Objects.ico" />
