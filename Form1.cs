@@ -271,7 +271,7 @@ namespace MoveDefaultUserFolders
                 if (Contacts.Checked) { MoveDirectory("{56784854-C6CB-462B-8169-88E350ACB882}", -181, "imageres.dll", ""); progressBar.Value += percent; }
                 if (Objects.Checked) { MoveDirectory("{31C0DD25-9439-4F12-BF41-7FF4EDA38722}", -108, "imageres.dll", ""); progressBar.Value += percent; }
                 if (error) progressBar.Value = 0;
-                else progressBar.Value = 100;
+                else { progressBar.Value = 100; System.Windows.Forms.MessageBox.Show("Successfully moved " + selectionCounter + " folders!"); }
             }
             else
             {
@@ -288,7 +288,7 @@ namespace MoveDefaultUserFolders
                 if (Contacts.Checked) { MoveDirectory("{56784854-C6CB-462B-8169-88E350ACB882}", -181, "imageres.dll", Contacts_TextBox.Text); progressBar.Value += percent; }
                 if (Objects.Checked) { MoveDirectory("{31C0DD25-9439-4F12-BF41-7FF4EDA38722}", -108, "imageres.dll", Objects_TextBox.Text); progressBar.Value += percent; }
                 if (error) progressBar.Value = 0;
-                else progressBar.Value = 100;
+                else { progressBar.Value = 100; System.Windows.Forms.MessageBox.Show("Successfully moved " + selectionCounter + " folders!"); }
             }
         }
 
