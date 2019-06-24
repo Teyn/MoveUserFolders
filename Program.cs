@@ -13,9 +13,13 @@ namespace MoveDefaultUserFolders
         [STAThread]
         static void Main()
         {
-            Application.EnableVisualStyles();
-            Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new Form1());
+        Application.EnableVisualStyles();
+        Application.SetCompatibleTextRenderingDefault(false);
+        Form mainForm = new Form1();
+        Form infoForm = new infoForm();
+            
+        Application.Run(mainForm);
+        infoForm.MdiParent = mainForm;
         }
 
 

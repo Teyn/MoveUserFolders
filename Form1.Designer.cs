@@ -750,6 +750,7 @@ namespace MoveDefaultUserFolders
             this.infoButton.Size = new System.Drawing.Size(26, 25);
             this.infoButton.TabIndex = 9;
             this.infoButton.UseVisualStyleBackColor = true;
+            this.infoButton.Click += new System.EventHandler(this.InfoButton_Click);
             // 
             // progressBar
             // 
@@ -773,7 +774,8 @@ namespace MoveDefaultUserFolders
             this.Controls.Add(this.NoRadioButton);
             this.Controls.Add(this.YesRadioButton);
             this.Controls.Add(this.QuestionLabel);
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.Name = "Form1";
             this.RightToLeft = System.Windows.Forms.RightToLeft.No;
