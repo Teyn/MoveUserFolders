@@ -128,12 +128,12 @@
             // licenseLabel
             // 
             this.licenseLabel.AutoSize = true;
-            this.licenseLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.licenseLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.licenseLabel.Location = new System.Drawing.Point(12, 109);
             this.licenseLabel.Name = "licenseLabel";
-            this.licenseLabel.Size = new System.Drawing.Size(195, 13);
+            this.licenseLabel.Size = new System.Drawing.Size(190, 12);
             this.licenseLabel.TabIndex = 2;
-            this.licenseLabel.Text = "Created by Teyn under the MIT License";
+            this.licenseLabel.Text = "Created by Gábor Kiss under the MIT License";
             // 
             // linkLabel1
             // 
