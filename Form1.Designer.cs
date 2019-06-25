@@ -709,10 +709,6 @@ namespace MoveDefaultUserFolders
             this.LocationLabel.TabIndex = 3;
             this.LocationLabel.Text = "Select desired location";
             // 
-            // LocationBrowserDialog
-            // 
-            this.LocationBrowserDialog.RootFolder = System.Environment.SpecialFolder.MyComputer;
-            // 
             // LocationBrowseButton
             // 
             this.LocationBrowseButton.Location = new System.Drawing.Point(15, 52);
