@@ -247,10 +247,72 @@ namespace MoveDefaultUserFolders
             textbox.SelectionLength = 0;
         }
 
+        string alert = "";
+        private string MoveInfo(Control ctrl)
+        {
+            CheckBox checkBox = ctrl as CheckBox;
+            if (checkBox == null)
+            {
+                foreach (Control child in ctrl.Controls)
+                {
+                    MoveInfo(child);
+                }
+            }
+            else
+            {
+                if (checkBox.Checked)
+                {
+                    alert += checkBox.Name.ToString() + " being moved to " + GetMoveLocation(checkBox.Name.ToString()) + "\n";
+                }
+            }
+            return alert + "\n\nNote: Folder names will be in your system's language.";
+        }
+        private string GetMoveLocation(string folderName)
+        {
+            string path = "";
+            if (YesRadioButton.Checked)
+            {
+                if (!LocationTextBox.Text.EndsWith("\\"))
+                {
+                    return (LocationTextBox.Text + "\\" + folderName);
+                }
+                else return (LocationTextBox.Text + folderName);
+
+            }
+            else
+            {
+                if (folderName == "Desktop") { path = Desktop_TextBox.Text; }
+                if (folderName == "Downloads") { path = Downloads_TextBox.Text; }
+                if (folderName == "Documents") { path = Documents_TextBox.Text; }
+                if (folderName == "Pictures") { path = Pictures_TextBox.Text; }
+                if (folderName == "Videos") { path = Videos_TextBox.Text; }
+                if (folderName == "Music") { path = Music_TextBox.Text; }
+                if (folderName == "Links") { path = Links_TextBox.Text; }
+                if (folderName == "Favorites") { path = Favorites_TextBox.Text; }
+                if (folderName == "Searches") { path = Searches_TextBox.Text; }
+                if (folderName == "SavedGames") { path = SavedGames_TextBox.Text; }
+                if (folderName == "Contacts") { path = Contacts_TextBox.Text; }
+                if (folderName == "Objects") { path = Objects_TextBox.Text; }
+            }
+            if (path.EndsWith("\\"))
+            {
+                return path.Remove(path.Length - 1);
+            }
+            else return path;
+
+        }
         //Move methods
         private void MoveFolders()
         {
-            if(selectionCounter == 0) { System.Windows.Forms.MessageBox.Show("Select something to move!", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Error); }
+            alert = "";
+
+            DialogResult dialogResult = MessageBox.Show("Moving Folders\n\n" + MoveInfo(GroupBox), "Are you sure?", MessageBoxButtons.OKCancel);
+            if (dialogResult == DialogResult.Cancel)
+            {
+                return;
+            }
+
+            if (selectionCounter == 0) { System.Windows.Forms.MessageBox.Show("Select something to move!", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Error); return; }
             progressBar.Value = 0;
             double helper = 100 / selectionCounter; 
             int percent = (int)Math.Round(helper);
@@ -258,35 +320,35 @@ namespace MoveDefaultUserFolders
             if (YesRadioButton.Checked)
             {
                 //Some Windows Operating Systems use different registry names. Check if Desktop exists
-                if (Desktop.Checked) { MoveDirectory("Desktop", -183, "imageres.dll", ""); progressBar.Value += percent; }
-                if (Downloads.Checked) { MoveDirectory("{374DE290-123F-4565-9164-39C4925E467B}", -184, "imageres.dll", ""); progressBar.Value += percent; }
-                if (Documents.Checked) { MoveDirectory("Personal", -112, "imageres.dll", ""); progressBar.Value += percent; }
-                if (Pictures.Checked) { MoveDirectory("My Pictures", -113, "imageres.dll", ""); progressBar.Value += percent; }
-                if (Videos.Checked) { MoveDirectory("My Video", -189, "imageres.dll", ""); progressBar.Value += percent; }
-                if (Music.Checked) { MoveDirectory("My Music", -108, "imageres.dll", ""); progressBar.Value += percent; }
-                if (Links.Checked) { MoveDirectory("{BFB9D5E0-C6A9-404C-B2B2-AE6DB6AF4968}", -185, "imageres.dll", ""); progressBar.Value += percent; }
-                if (Favorites.Checked) { MoveDirectory("Favorites", -173, "shell32.dll", ""); progressBar.Value += percent; }
-                if (Searches.Checked) { MoveDirectory("{7D1D3A04-DEBB-4115-95CF-2F29DA2920DA}", -18, "imageres.dll", ""); progressBar.Value += percent; }
-                if (SavedGames.Checked) { MoveDirectory("{4C5C32FF-BB9D-43B0-B5B4-2D72E54EAAA4}", -186, "imageres.dll", ""); progressBar.Value += percent; }
-                if (Contacts.Checked) { MoveDirectory("{56784854-C6CB-462B-8169-88E350ACB882}", -181, "imageres.dll", ""); progressBar.Value += percent; }
-                if (Objects.Checked) { MoveDirectory("{31C0DD25-9439-4F12-BF41-7FF4EDA38722}", -108, "imageres.dll", ""); progressBar.Value += percent; }
+                if (Desktop.Checked) { MoveDirectory("Desktop", -183, "imageres.dll", "", -21769, "shell32.dll"); progressBar.Value += percent; }
+                if (Downloads.Checked) { MoveDirectory("{374DE290-123F-4565-9164-39C4925E467B}", -184, "imageres.dll", "",-21798, "shell32.dll"); progressBar.Value += percent; }
+                if (Documents.Checked) { MoveDirectory("Personal", -112, "imageres.dll", "", -21770, "shell32.dll"); progressBar.Value += percent; }
+                if (Pictures.Checked) { MoveDirectory("My Pictures", -113, "imageres.dll", "", -21779, "shell32.dll"); progressBar.Value += percent; }
+                if (Videos.Checked) { MoveDirectory("My Video", -189, "imageres.dll", "", -21791, "shell32.dll"); progressBar.Value += percent; }
+                if (Music.Checked) { MoveDirectory("My Music", -108, "imageres.dll", "",-21790, "shell32.dll"); progressBar.Value += percent; }
+                if (Links.Checked) { MoveDirectory("{BFB9D5E0-C6A9-404C-B2B2-AE6DB6AF4968}", -185, "imageres.dll", "", -21810, "shell32.dll"); progressBar.Value += percent; }
+                if (Favorites.Checked) { MoveDirectory("Favorites", -173, "shell32.dll", "",-21796, "shell32.dll"); progressBar.Value += percent; }
+                if (Searches.Checked) { MoveDirectory("{7D1D3A04-DEBB-4115-95CF-2F29DA2920DA}", -18, "imageres.dll", "", -9031, "shell32.dll"); progressBar.Value += percent; }
+                if (SavedGames.Checked) { MoveDirectory("{4C5C32FF-BB9D-43B0-B5B4-2D72E54EAAA4}", -186, "imageres.dll", "", -21814, "shell32.dll"); progressBar.Value += percent; }
+                if (Contacts.Checked) { MoveDirectory("{56784854-C6CB-462B-8169-88E350ACB882}", -181, "imageres.dll", "", -10100, "wab32res.dll"); progressBar.Value += percent; }
+                if (Objects.Checked) { MoveDirectory("{31C0DD25-9439-4F12-BF41-7FF4EDA38722}", -198, "imageres.dll", "", -21825, "windows.storage.dll"); progressBar.Value += percent; }
                 if (error) progressBar.Value = 0;
                 else { progressBar.Value = 100; System.Windows.Forms.MessageBox.Show("Successfully moved " + selectionCounter + " folders!"); }
             }
             else
             {
-                if (Desktop.Checked) { MoveDirectory("Desktop", -183, "imageres.dll", Desktop_TextBox.Text); progressBar.Value += percent; }
-                if (Downloads.Checked) { MoveDirectory("{374DE290-123F-4565-9164-39C4925E467B}", -184, "imageres.dll", Downloads_TextBox.Text); progressBar.Value += percent; }
-                if (Documents.Checked) { MoveDirectory("Personal", -112, "imageres.dll", Documents_TextBox.Text); progressBar.Value += percent; }
-                if (Pictures.Checked) { MoveDirectory("My Pictures", -113, "imageres.dll", Pictures_TextBox.Text); progressBar.Value += percent; }
-                if (Videos.Checked) { MoveDirectory("My Video", -189, "imageres.dll", Videos_TextBox.Text); progressBar.Value += percent; }
-                if (Music.Checked) { MoveDirectory("My Music", -108, "imageres.dll", Music_TextBox.Text); progressBar.Value += percent; }
-                if (Links.Checked) { MoveDirectory("{BFB9D5E0-C6A9-404C-B2B2-AE6DB6AF4968}", -185, "imageres.dll", Links_TextBox.Text); progressBar.Value += percent; }
-                if (Favorites.Checked) { MoveDirectory("Favorites", -173, "shell32.dll", Favorites_TextBox.Text); progressBar.Value += percent; }
-                if (Searches.Checked) { MoveDirectory("{7D1D3A04-DEBB-4115-95CF-2F29DA2920DA}", -18, "imageres.dll", Searches_TextBox.Text); progressBar.Value += percent; }
-                if (SavedGames.Checked) { MoveDirectory("{4C5C32FF-BB9D-43B0-B5B4-2D72E54EAAA4}", -186, "imageres.dll", SavedGames_TextBox.Text); progressBar.Value += percent; }
-                if (Contacts.Checked) { MoveDirectory("{56784854-C6CB-462B-8169-88E350ACB882}", -181, "imageres.dll", Contacts_TextBox.Text); progressBar.Value += percent; }
-                if (Objects.Checked) { MoveDirectory("{31C0DD25-9439-4F12-BF41-7FF4EDA38722}", -108, "imageres.dll", Objects_TextBox.Text); progressBar.Value += percent; }
+                if (Desktop.Checked) { MoveDirectory("Desktop", -183, "imageres.dll", Desktop_TextBox.Text, -21769, "shell32.dll"); progressBar.Value += percent; }
+                if (Downloads.Checked) { MoveDirectory("{374DE290-123F-4565-9164-39C4925E467B}", -184, "imageres.dll", Downloads_TextBox.Text, -21798, "shell32.dll"); progressBar.Value += percent; }
+                if (Documents.Checked) { MoveDirectory("Personal", -112, "imageres.dll", Documents_TextBox.Text, -21770, "shell32.dll"); progressBar.Value += percent; }
+                if (Pictures.Checked) { MoveDirectory("My Pictures", -113, "imageres.dll", Pictures_TextBox.Text, -21779, "shell32.dll"); progressBar.Value += percent; }
+                if (Videos.Checked) { MoveDirectory("My Video", -189, "imageres.dll", Videos_TextBox.Text, -21791, "shell32.dll"); progressBar.Value += percent; }
+                if (Music.Checked) { MoveDirectory("My Music", -108, "imageres.dll", Music_TextBox.Text, -21790, "shell32.dll"); progressBar.Value += percent; }
+                if (Links.Checked) { MoveDirectory("{BFB9D5E0-C6A9-404C-B2B2-AE6DB6AF4968}", -185, "imageres.dll", Links_TextBox.Text, -21810, "shell32.dll"); progressBar.Value += percent; }
+                if (Favorites.Checked) { MoveDirectory("Favorites", -173, "shell32.dll", Favorites_TextBox.Text, -21796, "shell32.dll"); progressBar.Value += percent; }
+                if (Searches.Checked) { MoveDirectory("{7D1D3A04-DEBB-4115-95CF-2F29DA2920DA}", -18, "imageres.dll", Searches_TextBox.Text, -9031, "shell32.dll"); progressBar.Value += percent; }
+                if (SavedGames.Checked) { MoveDirectory("{4C5C32FF-BB9D-43B0-B5B4-2D72E54EAAA4}", -186, "imageres.dll", SavedGames_TextBox.Text, -21814, "shell32.dll"); progressBar.Value += percent; }
+                if (Contacts.Checked) { MoveDirectory("{56784854-C6CB-462B-8169-88E350ACB882}", -181, "imageres.dll", Contacts_TextBox.Text, -10100, "wab32res.dll"); progressBar.Value += percent; }
+                if (Objects.Checked) { MoveDirectory("{31C0DD25-9439-4F12-BF41-7FF4EDA38722}", -198, "imageres.dll", Objects_TextBox.Text, -21825, "windows.storage.dll"); progressBar.Value += percent; }
                 if (error) progressBar.Value = 0;
                 else { progressBar.Value = 100; System.Windows.Forms.MessageBox.Show("Successfully moved " + selectionCounter + " folders!"); }
             }
@@ -319,7 +381,7 @@ namespace MoveDefaultUserFolders
             }
         }
         private bool error;
-        private void MoveDirectory(string registryName, int iconNumber, string dllName, string individualLocation)
+        private void MoveDirectory(string registryName, int iconNumber, string dllName, string individualLocation, int localizedName, string localizedDllName)
         {
             error = false;
             string location="",sourceDir = "", folderName = GetFolderName(registryName);
@@ -332,8 +394,24 @@ namespace MoveDefaultUserFolders
             else { sourceDir = key.GetValue(registryName).ToString(); }
 
             string[] split = sourceDir.Split('\\');
-            if (NoRadioButton.Checked) { location = individualLocation; }
-            else { location = LocationTextBox.Text + split[split.Length - 1]; }
+            if (NoRadioButton.Checked)
+            {
+                if (NoRadioButton.Checked)
+                {
+                    if (individualLocation.EndsWith("\\"))
+                    {
+                        location = individualLocation.Remove(individualLocation.Length - 1);
+                    }
+                    else location = individualLocation;
+                }
+            }
+            else {
+                if (!LocationTextBox.Text.EndsWith("\\"))
+                {
+                    location = LocationTextBox.Text + "\\" + split[split.Length - 1];
+                }
+                else location = LocationTextBox.Text + split[split.Length - 1];
+            }
 
             if (sourceDir == location) { System.Windows.Forms.MessageBox.Show("The new folder must be different from the current folder!\n(" + split[split.Length - 1] + ")", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error); error = true; return; }
             else
@@ -353,21 +431,46 @@ namespace MoveDefaultUserFolders
             }
 
             split = sourceDir.Split('\\');
-            if (NoRadioButton.Checked) { location = individualLocation; }
-            else { location = LocationTextBox.Text + split[split.Length - 1]; }
-
-            if (sourceDir == location) { System.Windows.Forms.MessageBox.Show("The new folder must be different from the current folder!\n(" + split[split.Length - 1] + ")", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error); error = true; return;}
+            if (NoRadioButton.Checked)
+            {
+                if (individualLocation.EndsWith("\\"))
+                {
+                    location = individualLocation.Remove(individualLocation.Length - 1);
+                }
+                else location = individualLocation;
+            }
             else
             {
-             key.SetValue(registryName, location);
-             key.Close();
+                if (!LocationTextBox.Text.EndsWith("\\"))
+                {
+                    location = LocationTextBox.Text + "\\" + split[split.Length - 1];
+                }
+                else location = LocationTextBox.Text + split[split.Length - 1];
+            }
+
+            if (sourceDir == location) { System.Windows.Forms.MessageBox.Show("The new folder must be different from the current folder!\n(" + split[split.Length - 1] + ")", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error); error = true; return; }
+            else
+            {
+                key.SetValue(registryName, location);
+                key.Close();
 
                 RemoveDesktopIni(location);
-
+                if (localizedDllName == "wab32res.dll")
+                {
+                    string[] lines = {"[.ShellClassInfo]",
+                    "IconResource=%SystemRoot%\\system32\\" + dllName + "," + iconNumber,
+                    "LocalizedResourceName=@%CommonProgramFiles%\\system\\" + localizedDllName + "," + localizedName};
+                    File.WriteAllLines(location + @"\desktop.ini", lines);
+                    File.WriteAllLines(location + @"\desktop.ini", lines);
+                }
+                else
+                { 
                 string[] lines = {"[.ShellClassInfo]",
                     "IconResource=%SystemRoot%\\system32\\" + dllName + "," + iconNumber,
-                    "LocalizedResourceName=" + split[split.Length-1]};
-                File.WriteAllLines(location + @"\desktop.ini", lines);
+                    "LocalizedResourceName=@%SystemRoot%\\system32\\" + localizedDllName + "," + localizedName};
+                    File.WriteAllLines(location + @"\desktop.ini", lines);
+                }
+                
                 SetAttrib(location);
                 CopyFolder(sourceDir, location);
                 DeleteFolder(sourceDir);
