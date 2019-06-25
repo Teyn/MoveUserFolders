@@ -264,7 +264,9 @@ namespace MoveDefaultUserFolders
             {
                 if (checkBox.Checked)
                 {
+                    if (!(checkBox == selectAllCheckBox)) {
                     alert += checkBox.Name.ToString() + " being moved to " + GetMoveLocation(checkBox.Name.ToString()) + "\n";
+                    }
                 }
             }
             return alert + "\n\nNote: Folder names will be in your system's language.";
@@ -313,6 +315,12 @@ namespace MoveDefaultUserFolders
             double helper = 100 / selectionCounter; 
             int percent = (int)Math.Round(helper);
 
+            DialogResult dialogResult = MessageBox.Show("Moving Folders\n\n" + MoveInfo(GroupBox), "Are you sure?", MessageBoxButtons.OKCancel);
+            if (dialogResult == DialogResult.Cancel)
+            {
+                return;
+            }
+
             if (YesRadioButton.Checked)
             {
                 if (Desktop.Checked) { MoveDirectory("Desktop", -183, "imageres.dll", "", -21769, "shell32.dll"); progressBar.Value += percent; }
@@ -353,39 +361,25 @@ namespace MoveDefaultUserFolders
         {
             if (Directory.Exists(sourceFolder))
             {
-                string[] files = Directory.GetFiles(sourceFolder);
-                foreach (string file in files)
-                {
-                    string name = Path.GetFileName(file);
-                    if (name != "desktop.ini")
-                    {
-                        string dest = Path.Combine(destFolder, name);
-                        File.Copy(file, dest, true);
-                    }
-                }
-                string[] folders = Directory.GetDirectories(sourceFolder);
-                foreach (string folder in folders)
-                {
-                    if (Directory.Exists(folder)) //This is needed to avoid bugs in Documents, where it tries to move My Music and My Pictures... even though they are not there
-                    {
-                        string name = Path.GetFileName(folder);
-                        string dest = Path.Combine(destFolder, name);
-                        Directory.Move(folder, dest);
-                    }
-                }
+                string command1 = "/c xcopy " + '"' + sourceFolder + '"' + '"' + destFolder + '"' + " /E /I";
+
+                string arguments = command1;
+                System.Diagnostics.ProcessStartInfo procStartInfo = new System.Diagnostics.ProcessStartInfo("cmd", arguments);
+
+                procStartInfo.RedirectStandardOutput = true;
+                procStartInfo.UseShellExecute = false;
+                procStartInfo.CreateNoWindow = true;
+
+                System.Diagnostics.Process.Start(procStartInfo);
+
             }
         }
         private bool error;
         private void MoveDirectory(string registryName, int iconNumber, string dllName, string individualLocation, int localizedName, string localizedDllName)
         {
-            if (LocationTextBox.Text.Length < 3) { System.Windows.Forms.MessageBox.Show("Please select a valid location!", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Error); error = true; return; }
-            if (individualLocation.Length < 5) { System.Windows.Forms.MessageBox.Show("Please select a valid location!", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Error); error = true; return; }
+            if (LocationTextBox.Text.Length < 2) { System.Windows.Forms.MessageBox.Show("Please select a valid location!", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Error); error = true; return; }
+            if (NoRadioButton.Checked) { if (individualLocation.Length < 3) { System.Windows.Forms.MessageBox.Show("Please select a valid location!", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Error); error = true; return; } }
 
-            DialogResult dialogResult = MessageBox.Show("Moving Folders\n\n" + MoveInfo(GroupBox), "Are you sure?", MessageBoxButtons.OKCancel);
-            if (dialogResult == DialogResult.Cancel)
-            {
-                return;
-            }
 
             error = false;
             string location="",sourceDir = "", folderName = GetFolderName(registryName);
