@@ -3,7 +3,7 @@ Move User Folders is a simple application to change the location of your user fo
 
 Note: A minimum of .NET Framework 3.5 is required for this app to work properly.
 
-<img src = https://i.imgur.com/5T6MOHf.gif width=305><img src = https://i.imgur.com/wfUKvUp.jpg width = 600>
+<img src = https://i.imgur.com/5T6MOHf.gif width=291><img src = https://i.imgur.com/wfUKvUp.jpg width = 570>
 
 ## Usage
 After launching as administrator, you will be greeted by a simple interface.
